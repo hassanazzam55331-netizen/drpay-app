@@ -138,6 +138,13 @@ BEGIN
     SET balance = balance - amount
     WHERE id = m_id;
 END;
+$$ LANGUAGE plpgsql;
+
+-- 13. BOOTSTRAP ADMINISTRATOR
+-- Replace UUID with actual Auth ID after first registration
+-- INSERT INTO profiles (id, full_name, account_id, is_admin, status)
+-- VALUES ('YOUR_AUTH_ID', 'مدير النظام', 'ADMIN-1', true, 'active');
+
 
 CREATE OR REPLACE FUNCTION add_balance(m_id UUID, amount DECIMAL)
 RETURNS void AS $$
