@@ -19,7 +19,7 @@ export async function POST(request) {
   try {
     const { ticket_id, admin_id, message, status } = await request.json();
 
-    // 1. Add Message
+    // 1. Add Admin Message
     const { error: mError } = await supabase
       .from('ticket_messages')
       .insert([{ 
@@ -34,7 +34,10 @@ export async function POST(request) {
     // 2. Update Ticket Status
     const { error: tError } = await supabase
       .from('tickets')
-      .update({ status: status || 'replied', last_reply_at: new Date().toISOString() })
+      .update({ 
+          status: status || 'replied', 
+          last_reply_at: new Date().toISOString() 
+      })
       .eq('id', ticket_id);
 
     if (tError) throw tError;

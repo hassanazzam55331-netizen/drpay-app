@@ -11,6 +11,8 @@ function Sidebar({ activeTab, setActiveTab }) {
     { id: "home", icon: "🏠", label: "الرئيسية" },
     { id: "services", icon: "📋", label: "الخدمات" },
     { id: "transactions", icon: "📊", label: "العمليات" },
+    { id: "deposits", icon: "💰", label: "الإيداعات" },
+    { id: "support", icon: "🎧", label: "الدعم الفني" },
     { id: "settings", icon: "⚙️", label: "الإعدادات" },
   ];
 
@@ -79,11 +81,11 @@ function Header({ balance, balanceLoading }) {
 import ThermalReceipt from "@/components/ThermalReceipt";
 
 // ============ STAT CARDS ============
-function StatCards({ summary }) {
+function StatCards({ summary, loading }) {
   const stats = [
-    { label: "عمليات اليوم", value: summary?.count || 0, icon: "📊", color: "from-indigo-500/15 to-purple-500/15", border: "border-indigo-500/20" },
-    { label: "إجمالي المبالغ", value: `${(summary?.total_amount || 0).toFixed(2)} ج`, icon: "💵", color: "from-emerald-500/15 to-green-500/15", border: "border-emerald-500/20" },
-    { label: "ناجحة", value: summary?.success_count || 0, icon: "✅", color: "from-cyan-500/15 to-blue-500/15", border: "border-cyan-500/20" },
+    { label: "عمليات اليوم", value: loading ? "..." : summary?.count || 0, icon: "📊", color: "from-indigo-500/15 to-purple-500/15", border: "border-indigo-500/20" },
+    { label: "إجمالي المبالغ", value: loading ? "..." : `${(summary?.total_amount || 0).toFixed(2)} ج`, icon: "💵", color: "from-emerald-500/15 to-green-500/15", border: "border-emerald-500/20" },
+    { label: "ناجحة", value: loading ? "..." : summary?.success_count || 0, icon: "✅", color: "from-cyan-500/15 to-blue-500/15", border: "border-cyan-500/20" },
   ];
 
   return (
@@ -710,7 +712,163 @@ function TransactionsView({ transactions }) {
   );
 }
 
-// ============ SETTINGS VIEW ============
+// ============ DEPOSITS VIEW ============
+function DepositsView() {
+  const [deposits, setDeposits] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [amount, setAmount] = useState("");
+  const [method, setMethod] = useState("vodafone_cash");
+
+  useEffect(() => {
+    loadDeposits();
+  }, []);
+
+  const loadDeposits = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("drpay_user"));
+      const res = await fetch(`/api/merchant/deposits?merchant_id=${user.id}`);
+      const data = await res.json();
+      if (data.success) setDeposits(data.deposits);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("drpay_user"));
+    try {
+      const res = await fetch("/api/deposits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          merchant_id: user.id,
+          amount: parseFloat(amount),
+          method,
+          notes: `طلب إيداع عبر ${method}`
+        }),
+      });
+      if (res.ok) {
+        setAmount("");
+        loadDeposits();
+        alert("تم إرسال طلب الإيداع بنجاح");
+      }
+    } catch (e) { alert("فشل إرسال الطلب"); }
+  };
+
+  return (
+    <div className="animate-fade-in grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="glass rounded-3xl p-6 border-indigo-500/20">
+        <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+          <span>💳</span> طلب إيداع رصيد جديد
+        </h3>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm text-slate-400 mb-2">طريقة الإيداع</label>
+            <select className="input-field" value={method} onChange={(e) => setMethod(e.target.value)}>
+              <option value="vodafone_cash">فودافون كاش (01026402377)</option>
+              <option value="instapay">InstaPay (hassan@instapay)</option>
+              <option value="bank_transfer">تحويل بنكي</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm text-slate-400 mb-2">المبلغ (ج.م)</label>
+            <input type="number" className="input-field" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" required />
+          </div>
+          <button type="submit" className="btn-primary w-full py-4 font-bold text-lg">ارسال الطلب</button>
+        </form>
+      </div>
+
+      <div className="glass rounded-3xl p-6">
+        <h3 className="text-xl font-bold mb-6">سجل الإيداعات</h3>
+        <div className="space-y-3">
+          {loading ? [1,2,3].map(i => <div key={i} className="h-16 shimmer rounded-2xl" />) :
+           deposits.length === 0 ? <p className="text-center text-slate-500 py-10">لا توجد طلبات سابقة</p> :
+           deposits.map((d, i) => (
+            <div key={i} className="flex justify-between items-center p-4 rounded-2xl border border-white/5 bg-white/5">
+              <div>
+                <p className="font-bold">{d.amount} ج.م</p>
+                <p className="text-[10px] text-slate-500">{new Date(d.created_at).toLocaleString('ar-EG')}</p>
+              </div>
+              <span className={`badge ${d.status === 'confirmed' ? 'badge-success' : d.status === 'rejected' ? 'badge-danger' : 'badge-info'}`}>
+                {d.status === 'confirmed' ? 'مؤكد' : d.status === 'rejected' ? 'مرفوض' : 'قيد الانتظار'}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============ SUPPORT VIEW ============
+function SupportView() {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => { loadTickets(); }, []);
+
+  const loadTickets = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("drpay_user"));
+      const res = await fetch(`/api/support?merchant_id=${user.id}`);
+      const data = await res.json();
+      if (data.success) setTickets(data.tickets);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  };
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("drpay_user"));
+    try {
+      const res = await fetch("/api/support", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ merchant_id: user.id, subject, message }),
+      });
+      if (res.ok) {
+        setSubject(""); setMessage(""); loadTickets();
+        alert("تم إرسال تذكرة الدعم بنجاح");
+      }
+    } catch (e) { alert("فشل الإرسال"); }
+  };
+
+  return (
+    <div className="animate-fade-in grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="glass rounded-3xl p-6">
+        <h3 className="text-xl font-bold mb-6">فتح تذكرة دعم جديدة</h3>
+        <form onSubmit={handleCreate} className="space-y-4">
+          <input type="text" className="input-field" placeholder="الموضوع" value={subject} onChange={e => setSubject(e.target.value)} required />
+          <textarea className="input-field h-32" placeholder="اشرح مشكلتك هنا..." value={message} onChange={e => setMessage(e.target.value)} required />
+          <button type="submit" className="btn-primary w-full py-4 font-bold text-lg">إرسال التذكرة</button>
+        </form>
+      </div>
+
+      <div className="glass rounded-3xl p-6">
+        <h3 className="text-xl font-bold mb-6">تذاكر الدعم السابقة</h3>
+        <div className="space-y-3 max-h-[500px] overflow-y-auto">
+          {loading ? [1,2,3].map(i => <div key={i} className="h-16 shimmer rounded-2xl" />) :
+           tickets.map((t, i) => (
+            <div key={i} className="p-4 rounded-2xl border border-white/5 bg-white/5 space-y-2">
+              <div className="flex justify-between items-start">
+                <p className="font-bold text-sm">{t.subject}</p>
+                <span className={`badge ${t.status === 'open' ? 'badge-info' : 'badge-success'}`}>
+                  {t.status === 'open' ? 'مفتوحة' : 'تم الرد'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 line-clamp-2">{t.ticket_messages?.[0]?.message}</p>
+              <p className="text-[10px] text-slate-600">{new Date(t.created_at).toLocaleDateString('ar-EG')}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============ MAIN DASHBOARD ============
 function SettingsView() {
   return (
     <div className="animate-fade-in max-w-lg">
@@ -754,19 +912,38 @@ export default function DashboardPage() {
 
   const [search, setSearch] = useState("");
   const [allServices, setAllServices] = useState([]);
+  const [dailySummary, setDailySummary] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(true);
 
   // Auth check
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("drpay_user"));
     const token = localStorage.getItem("drpay_token");
-    if (!token) {
+    if (!token || !user) {
       router.push("/");
       return;
     }
     loadBalance();
     loadCatalog();
+    loadDailySummary(user.id);
     const saved = localStorage.getItem("drpay_transactions");
     if (saved) setTransactions(JSON.parse(saved));
   }, [router]);
+
+  const loadDailySummary = async (merchantId) => {
+    setSummaryLoading(true);
+    try {
+      const res = await fetch(`/api/merchant/daily`, {
+          headers: { 'x-merchant-id': merchantId }
+      });
+      const data = await res.json();
+      if (data.success) setDailySummary(data.summary);
+    } catch (e) {
+      console.error("Daily summary failed", e);
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
 
   // Flatten all services for global search
   useEffect(() => {
@@ -894,7 +1071,7 @@ export default function DashboardPage() {
 
         {activeTab === "home" && (
           <>
-            <StatCards transactions={transactions} />
+            <StatCards summary={dailySummary} loading={summaryLoading} />
             <CategoryGrid onSelect={handleCategorySelect} />
           </>
         )}
@@ -918,6 +1095,14 @@ export default function DashboardPage() {
 
         {activeTab === "transactions" && (
           <TransactionsView transactions={transactions} />
+        )}
+
+        {activeTab === "deposits" && (
+          <DepositsView />
+        )}
+
+        {activeTab === "support" && (
+          <SupportView />
         )}
 
         {activeTab === "settings" && <SettingsView />}

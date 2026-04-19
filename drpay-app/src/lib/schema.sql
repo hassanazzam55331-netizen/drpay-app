@@ -39,6 +39,17 @@ CREATE TABLE IF NOT EXISTS profiles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- System Deposit Accounts (Bank/Wallets for merchants to pay to)
+CREATE TABLE IF NOT EXISTS system_accounts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL,
+    type TEXT NOT NULL, -- bank, wallet
+    number TEXT NOT NULL,
+    instructions TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 4. TRANSACTIONS
 CREATE TABLE IF NOT EXISTS transactions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -62,30 +73,18 @@ CREATE TABLE IF NOT EXISTS deposits (
     merchant_id UUID REFERENCES profiles(id),
     amount DECIMAL(12, 2) NOT NULL,
     payment_method TEXT NOT NULL, -- Vodafone Cash, Bank, etc
-    proof_url TEXT, -- Proof image
     status dep_status DEFAULT 'pending',
-    admin_note TEXT,
-    processed_at TIMESTAMP WITH TIME ZONE,
+    notes TEXT,
+    proof_url TEXT, -- Proof image
+    confirmed_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. OFFICIAL RECEIVING ACCOUNTS (Configured by Admin)
-CREATE TABLE IF NOT EXISTS official_accounts (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name TEXT NOT NULL,
-    type TEXT NOT NULL, -- Bank, Wallet
-    number TEXT NOT NULL,
-    instructions TEXT,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- 7. SUPPORT TICKETS
+-- 6. SUPPORT TICKETS
 CREATE TABLE IF NOT EXISTS tickets (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     merchant_id UUID REFERENCES profiles(id),
     subject TEXT NOT NULL,
-    priority TEXT DEFAULT 'normal',
     status ticket_status DEFAULT 'open',
     last_reply_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -100,58 +99,38 @@ CREATE TABLE IF NOT EXISTS ticket_messages (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 8. SERVICE OVERRIDES (Admin Control)
-CREATE TABLE IF NOT EXISTS service_overrides (
-    service_code TEXT PRIMARY KEY,
-    custom_fee DECIMAL(10, 2),
-    is_active BOOLEAN DEFAULT TRUE,
-    last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- 9. SYSTEM SETTINGS
+-- 7. SYSTEM SETTINGS
 CREATE TABLE IF NOT EXISTS system_settings (
     key TEXT PRIMARY KEY,
     value JSONB,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 10. POLICIES & SECURITY
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE deposits ENABLE ROW LEVEL SECURITY;
-ALTER TABLE tickets ENABLE ROW LEVEL SECURITY;
+-- 8. FUNCTIONS (RPC)
+CREATE OR REPLACE FUNCTION deduct_balance(p_merchant_id UUID, p_amount DECIMAL)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE profiles
+    SET balance = balance - p_amount
+    WHERE id = p_merchant_id AND balance >= p_amount;
+    
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Insufficient balance or merchant not found';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
 
--- Basic Policies (Simplified for prototype)
-CREATE POLICY "Public profile access" ON profiles FOR SELECT USING (true);
-CREATE POLICY "Merchant transaction access" ON transactions FOR SELECT USING (auth.uid() = merchant_id OR (SELECT is_admin FROM profiles WHERE id = auth.uid()));
+CREATE OR REPLACE FUNCTION add_balance(p_merchant_id UUID, p_amount DECIMAL)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE profiles
+    SET balance = balance + p_amount
+    WHERE id = p_merchant_id;
+END;
+$$ LANGUAGE plpgsql;
 
--- 11. INITIAL SEEDING
-INSERT INTO system_settings (key, value) 
-VALUES ('PAYMENT_MODE', '{"mode": "FULL_SYNC"}')
+-- 9. INITIAL DATA
+INSERT INTO system_settings (key, value) VALUES 
+('maintenance_mode', 'false'),
+('global_notice', '"Welcome to Dr. Pay Professional Platform"')
 ON CONFLICT (key) DO NOTHING;
-
--- 12. RPC FUNCTIONS
-CREATE OR REPLACE FUNCTION deduct_balance(m_id UUID, amount DECIMAL)
-RETURNS void AS $$
-BEGIN
-    UPDATE profiles
-    SET balance = balance - amount
-    WHERE id = m_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- 13. BOOTSTRAP ADMINISTRATOR
--- Replace UUID with actual Auth ID after first registration
--- INSERT INTO profiles (id, full_name, account_id, is_admin, status)
--- VALUES ('YOUR_AUTH_ID', 'مدير النظام', 'ADMIN-1', true, 'active');
-
-
-CREATE OR REPLACE FUNCTION add_balance(m_id UUID, amount DECIMAL)
-RETURNS void AS $$
-BEGIN
-    UPDATE profiles
-    SET balance = balance + amount
-    WHERE id = m_id;
-END;
-$$ LANGUAGE plpgsql;
-

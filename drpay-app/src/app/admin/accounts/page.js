@@ -14,24 +14,56 @@ export default function AdminDepositAccounts() {
   }, []);
 
   const fetchAccounts = async () => {
-    // Mock for development
-    setTimeout(() => {
-        setAccounts([
-            { id: 1, name: "البنك الأهلي المصري", type: "بنك", number: "1234-5678-9012-3456", is_active: true },
-            { id: 2, name: "فودافون كاش", type: "محفظة", number: "01283986095", is_active: true }
-        ]);
-        setLoading(false);
-    }, 600);
+    try {
+      const res = await fetch('/api/admin/accounts');
+      const data = await res.json();
+      setAccounts(Array.isArray(data) ? data : []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch accounts", error);
+    }
   };
 
-  const handleAdd = () => {
-      setAccounts([...accounts, { ...newAcc, id: Date.now(), is_active: true }]);
+  const handleAdd = async () => {
+    try {
+      await fetch('/api/admin/accounts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', ...newAcc })
+      });
+      fetchAccounts();
       setShowAdd(false);
       setNewAcc({ name: '', type: 'بنك', number: '', instructions: '' });
+    } catch (e) {
+      alert('فشل إضافة الحساب');
+    }
   };
 
-  const toggleStatus = (id) => {
-      setAccounts(accounts.map(a => a.id === id ? { ...a, is_active: !a.is_active } : a));
+  const toggleStatus = async (id, currentStatus) => {
+    try {
+      await fetch('/api/admin/accounts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', id, is_active: !currentStatus })
+      });
+      fetchAccounts();
+    } catch (e) {
+      alert('فشل تحديث الحالة');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('هل أنت متأكد من الحذف؟')) return;
+    try {
+      await fetch('/api/admin/accounts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', id })
+      });
+      fetchAccounts();
+    } catch (e) {
+      alert('فشل الحذف');
+    }
   };
 
   if (loading) return null;
@@ -67,15 +99,15 @@ export default function AdminDepositAccounts() {
                         }`}>
                             {acc.is_active ? 'مفعل' : 'معطل'}
                         </span>
-                        <button onClick={() => toggleStatus(acc.id)} className="text-xs text-indigo-400 hover:text-indigo-300 font-bold">تغيير الحالة</button>
-                        <button className="text-xs text-red-500 hover:text-red-400 font-bold">حذف</button>
+                        <button onClick={() => toggleStatus(acc.id, acc.is_active)} className="text-xs text-indigo-400 hover:text-indigo-300 font-bold">تغيير الحالة</button>
+                        <button onClick={() => handleDelete(acc.id)} className="text-xs text-red-500 hover:text-red-400 font-bold">حذف</button>
                     </div>
                 </div>
             ))}
+            {accounts.length === 0 && <p className="text-center text-slate-500 py-10">لا توجد حسابات مسجلة</p>}
         </div>
       </main>
 
-      {/* Add Modal */}
       {showAdd && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in">
               <div className="glass w-full max-w-xl rounded-3xl p-8 shadow-2xl animate-scale-in">

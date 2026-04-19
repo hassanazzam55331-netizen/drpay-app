@@ -13,7 +13,8 @@ export default function AdminMerchants() {
       phone: '',
       nationalId: '',
       address: '',
-      status: 'active'
+      status: 'active',
+      is_admin: false
   });
 
   useEffect(() => {
@@ -163,6 +164,15 @@ export default function AdminMerchants() {
                         value={newMerchant.address} onChange={e => setNewMerchant({...newMerchant, address: e.target.value})}
                         className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 h-24"
                       />
+                      <div className="flex items-center gap-3 p-3 glass rounded-xl">
+                          <input 
+                            type="checkbox" 
+                            checked={newMerchant.is_admin} 
+                            onChange={e => setNewMerchant({...newMerchant, is_admin: e.target.checked})}
+                            id="is_admin_check"
+                          />
+                          <label htmlFor="is_admin_check" className="text-sm text-slate-300">منح صلاحيات مدير النظام (Admin)</label>
+                      </div>
                   </div>
                   <div className="flex gap-4 mt-8">
                       <button onClick={() => setShowAddForm(false)} className="flex-1 py-3 rounded-xl bg-slate-800 font-bold">إلغاء</button>
@@ -207,9 +217,17 @@ export default function AdminMerchants() {
                    <button onClick={() => updateStatus(selectedMerchant.id, 'active')} className="px-10 py-3 rounded-xl bg-emerald-500 text-white font-bold">موافقة</button>
                  </>
                )}
-               {selectedMerchant.status === 'active' && (
-                   <button onClick={() => updateStatus(selectedMerchant.id, 'rejected')} className="px-6 py-3 rounded-xl bg-red-500/10 text-red-500 font-bold">إيقاف الحساب</button>
-               )}
+                {selectedMerchant.status === 'active' && (
+                   <div className="flex gap-2">
+                       <button 
+                         onClick={() => updateStatus(selectedMerchant.id, selectedMerchant.status, 'toggle_admin')} 
+                         className={`px-6 py-3 rounded-xl font-bold ${selectedMerchant.is_admin ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'}`}
+                       >
+                         {selectedMerchant.is_admin ? 'إزالة صلاحية مدير' : 'جعل مديراً للنظام'}
+                       </button>
+                       <button onClick={() => updateStatus(selectedMerchant.id, 'rejected')} className="px-6 py-3 rounded-xl bg-red-500/10 text-red-500 font-bold">إيقاف الحساب</button>
+                   </div>
+                )}
             </div>
           </div>
         </div>
