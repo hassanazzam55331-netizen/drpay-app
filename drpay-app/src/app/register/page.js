@@ -7,19 +7,57 @@ export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
+    storeName: "",
     nationalId: "",
     phone: "",
+    phone2: "",
     address: "",
+    governorate: "",
     password: "",
+    latitude: null,
+    longitude: null,
   });
-  const [idFront, setIdFront] = useState(null);
-  const [idBack, setIdBack] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+
+  const GOVERNORATES = {
+    '01': 'القاهرة', '02': 'الإسكندرية', '03': 'بورسعيد', '04': 'السويس',
+    '11': 'دمياط', '12': 'الدقهلية', '13': 'الشرقية', '14': 'القليوبية',
+    '15': 'كفر الشيخ', '16': 'الغربية', '17': 'المنوفية', '18': 'البحيرة',
+    '19': 'الإسماعيلية', '21': 'الجيزة', '22': 'بني سويف', '23': 'الفيوم',
+    '24': 'المنيا', '25': 'أسيوط', '26': 'سوهاج', '27': 'قنا', '28': 'أسوان',
+    '29': 'الأقصر', '31': 'البحر الأحمر', '32': 'الوادي الجديد', '33': 'مطروح',
+    '34': 'شمال سيناء', '35': 'جنوب سيناء', '88': 'خارج مصر'
+  };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let updatedData = { ...formData, [name]: value };
+
+    // Auto-extract Governorate from National ID
+    if (name === 'nationalId' && value.length >= 9) {
+      const govCode = value.substring(7, 9);
+      updatedData.governorate = GOVERNORATES[govCode] || "";
+    }
+
+    setFormData(updatedData);
+  };
+
+  const captureLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setFormData(prev => ({ ...prev, latitude: pos.coords.latitude, longitude: pos.coords.longitude }));
+      });
+    }
+  };
+
+  const captureDeviceInfo = () => {
+    return {
+      ua: navigator.userAgent,
+      platform: navigator.platform,
+      lang: navigator.language,
+      vendor: navigator.vendor,
+      screen: `${window.screen.width}x${window.screen.height}`,
+      tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+    };
   };
 
   const handleRegister = async (e) => {
@@ -34,7 +72,11 @@ export default function RegisterPage() {
 
     try {
       const data = new FormData();
-      Object.entries(formData).forEach(([key, val]) => data.append(key, val));
+      const deviceInfo = captureDeviceInfo();
+      
+      Object.entries(formData).forEach(([key, val]) => data.append(key, val || ""));
+      data.append("deviceInfo", JSON.stringify(deviceInfo));
+      
       if (idFront) data.append("idFront", idFront);
       if (idBack) data.append("idBack", idBack);
 
@@ -56,6 +98,7 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
 
   if (success) {
     return (
@@ -84,13 +127,25 @@ export default function RegisterPage() {
           <form onSubmit={handleRegister} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="col-span-1 md:col-span-2">
-                <label className="block text-sm font-medium text-slate-300 mb-2">الاسم بالكامل</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">اسم المحل / النشاط</label>
+                <input
+                  name="storeName"
+                  type="text"
+                  required
+                  className="input-field"
+                  placeholder="أدخل اسم المحل التجاري"
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="col-span-1 md:col-span-2">
+                <label className="block text-sm font-medium text-slate-300 mb-2">الاسم بالكامل (كما في البطاقة)</label>
                 <input
                   name="fullName"
                   type="text"
                   required
                   className="input-field"
-                  placeholder="أدخل الاسم ثلاثي كما في البطاقة"
+                  placeholder="أدخل الاسم ثلاثي أو رباعي"
                   onChange={handleInputChange}
                 />
               </div>
@@ -110,7 +165,19 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">رقم المحمول</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">المحافظة (تلقائي)</label>
+                <input
+                  name="governorate"
+                  type="text"
+                  readOnly
+                  value={formData.governorate}
+                  className="input-field bg-slate-800/50 cursor-not-allowed border-amber-500/30 text-amber-500"
+                  placeholder="سيظهر الاسم بعد كتابة الرقم القومي"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">رقم المحمول الأساسي</label>
                 <input
                   name="phone"
                   type="tel"
@@ -122,8 +189,29 @@ export default function RegisterPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">رقم هاتف إضافي (اختياري)</label>
+                <input
+                  name="phone2"
+                  type="tel"
+                  className="input-field"
+                  placeholder="01xxxxxxxxx"
+                  onChange={handleInputChange}
+                  dir="ltr"
+                />
+              </div>
+
               <div className="col-span-1 md:col-span-2">
-                <label className="block text-sm font-medium text-slate-300 mb-2">العنوان بالتفصيل</label>
+                <div className="flex justify-between items-center mb-2">
+                    <label className="text-sm font-medium text-slate-300">الموقع الجغرافي للمحل</label>
+                    <button 
+                        type="button" 
+                        onClick={captureLocation}
+                        className="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                    >
+                        {formData.latitude ? '✅ تم تحديد الموقع' : '📍 اضغط لتحديد الموقع بدقة'}
+                    </button>
+                </div>
                 <input
                   name="address"
                   type="text"
@@ -147,6 +235,7 @@ export default function RegisterPage() {
                 />
               </div>
             </div>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
               <div className="space-y-2">

@@ -113,25 +113,71 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                     <Link href="/admin/merchants" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-indigo-500/50 transition-all group">
                         <div className="flex items-center gap-4">
-                            <span className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">📄</span>
+                            <span className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">👥</span>
                             <div>
-                                <p className="font-bold text-sm">مراجعة طلبات الانضمام</p>
-                                <p className="text-xs text-slate-500">3 تجار في انتظار الموافقة</p>
+                                <p className="font-bold text-sm">إدارة المستخدمين والتجار</p>
+                                <p className="text-xs text-slate-500">إضافة، تعديل، أو تفعيل حسابات التجار</p>
                             </div>
                         </div>
                         <span className="text-slate-600 group-hover:translate-x-[-4px] transition-transform">←</span>
                     </Link>
 
-                    <Link href="/admin/transactions" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-indigo-500/50 transition-all group">
+                    <Link href="/admin/deposits" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-emerald-500/50 transition-all group">
                         <div className="flex items-center gap-4">
-                            <span className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">🔍</span>
+                            <span className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">💰</span>
                             <div>
-                                <p className="font-bold text-sm">تتبع العمليات</p>
-                                <p className="text-xs text-slate-500">عرض جميع العمليات المنفذة على المنصة</p>
+                                <p className="font-bold text-sm">عمليات الإيداع والشحن</p>
+                                <p className="text-xs text-slate-500">مراجعة وتأكيد طلبات رصيد التجار</p>
                             </div>
                         </div>
                         <span className="text-slate-600 group-hover:translate-x-[-4px] transition-transform">←</span>
                     </Link>
+
+                    <Link href="/admin/support" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition-all group">
+                        <div className="flex items-center gap-4">
+                            <span className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">📬</span>
+                            <div>
+                                <p className="font-bold text-sm">تذاكر الدعم الفني</p>
+                                <p className="text-xs text-slate-500">الرد على استفسارات المشتركين</p>
+                            </div>
+                        </div>
+                        <span className="text-slate-600 group-hover:translate-x-[-4px] transition-transform">←</span>
+                    </Link>
+
+                    <Link href="/admin/accounts" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 transition-all group">
+                        <div className="flex items-center gap-4">
+                            <span className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">🏦</span>
+                            <div>
+                                <p className="font-bold text-sm">إدارة حسابات الاستقبال</p>
+                                <p className="text-xs text-slate-500">تعديل أرقام الحسابات التي تستقبل الإيداعات</p>
+                            </div>
+                        </div>
+                        <span className="text-slate-600 group-hover:translate-x-[-4px] transition-transform">←</span>
+                    </Link>
+
+                    <Link href="/admin/services" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-indigo-500/50 transition-all group">
+                        <div className="flex items-center gap-4">
+                            <span className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">📋</span>
+                            <div>
+                                <p className="font-bold text-sm">إدارة الخدمات والرسوم</p>
+                                <p className="text-xs text-slate-500">تعديل الرسوم أو تعطيل خدمات النظام</p>
+                            </div>
+                        </div>
+                        <span className="text-slate-600 group-hover:translate-x-[-4px] transition-transform">←</span>
+                    </Link>
+
+
+                    <Link href="/admin/settings" className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-slate-500 transition-all group">
+                        <div className="flex items-center gap-4">
+                            <span className="w-10 h-10 rounded-lg bg-slate-500/10 flex items-center justify-center text-slate-400">⚙️</span>
+                            <div>
+                                <p className="font-bold text-sm">إعدادات النظام والوكيل</p>
+                                <p className="text-xs text-slate-500">تغيير الموقع الأساسي وتجربة الاتصال</p>
+                            </div>
+                        </div>
+                        <span className="text-slate-600 group-hover:translate-x-[-4px] transition-transform">←</span>
+                    </Link>
+
                 </div>
               </div>
            </div>

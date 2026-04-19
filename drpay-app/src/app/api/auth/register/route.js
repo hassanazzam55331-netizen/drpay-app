@@ -5,16 +5,22 @@ export async function POST(request) {
   try {
     const formData = await request.formData();
     const fullName = formData.get('fullName');
+    const storeName = formData.get('storeName');
     const nationalId = formData.get('nationalId');
     const phone = formData.get('phone');
+    const phone2 = formData.get('phone2');
     const address = formData.get('address');
+    const governorate = formData.get('governorate');
+    const latitude = formData.get('latitude');
+    const longitude = formData.get('longitude');
+    const deviceInfo = formData.get('deviceInfo');
     const password = formData.get('password');
     const idFront = formData.get('idFront');
     const idBack = formData.get('idBack');
 
     // 1. Create Supabase Auth User
     const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: `${phone}@drpay.local`, // Use phone as unique identifier
+      email: `${phone}@drpay.local`,
       password: password,
     });
 
@@ -22,21 +28,21 @@ export async function POST(request) {
 
     const userId = authData.user.id;
 
-    // 2. Upload ID Images (simplified for now, assumes bucket 'id-documents' exists)
+    // 2. Upload ID Images
     let frontUrl = '';
     let backUrl = '';
 
-    if (idFront) {
+    if (idFront && typeof idFront !== 'string') {
       const { data: frontData } = await supabase.storage
         .from('id-documents')
-        .upload(`${userId}/front.jpg`, idFront);
+        .upload(`${userId}/front.jpg`, idFront, { upsert: true });
       frontUrl = frontData?.path || '';
     }
 
-    if (idBack) {
+    if (idBack && typeof idBack !== 'string') {
       const { data: backData } = await supabase.storage
         .from('id-documents')
-        .upload(`${userId}/back.jpg`, idBack);
+        .upload(`${userId}/back.jpg`, idBack, { upsert: true });
       backUrl = backData?.path || '';
     }
 
@@ -44,13 +50,20 @@ export async function POST(request) {
     const { error: profileError } = await supabase.from('profiles').insert([{
       id: userId,
       full_name: fullName,
+      store_name: storeName,
       national_id: nationalId,
       phone: phone,
+      phone_2: phone2,
       address: address,
+      governorate: governorate,
+      latitude: latitude ? parseFloat(latitude) : null,
+      longitude: longitude ? parseFloat(longitude) : null,
+      device_info: deviceInfo ? JSON.parse(deviceInfo) : null,
       id_front_url: frontUrl,
       id_back_url: backUrl,
       status: 'pending'
     }]);
+
 
     if (profileError) throw profileError;
 

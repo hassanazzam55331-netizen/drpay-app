@@ -76,36 +76,37 @@ function Header({ balance, balanceLoading }) {
   );
 }
 
+import ThermalReceipt from "@/components/ThermalReceipt";
+
 // ============ STAT CARDS ============
-function StatCards({ transactions }) {
-  const todayCount = transactions.length;
-  const todayTotal = transactions.reduce((s, t) => s + (t.amount || 0), 0);
-  const successCount = transactions.filter((t) => t.status === "YES").length;
+function StatCards({ summary }) {
+  const stats = [
+    { label: "عمليات اليوم", value: summary?.count || 0, icon: "📊", color: "from-indigo-500/15 to-purple-500/15", border: "border-indigo-500/20" },
+    { label: "إجمالي المبالغ", value: `${(summary?.total_amount || 0).toFixed(2)} ج`, icon: "💵", color: "from-emerald-500/15 to-green-500/15", border: "border-emerald-500/20" },
+    { label: "ناجحة", value: summary?.success_count || 0, icon: "✅", color: "from-cyan-500/15 to-blue-500/15", border: "border-cyan-500/20" },
+  ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-      {[
-        { label: "عمليات اليوم", value: todayCount, icon: "📊", color: "from-indigo-500/15 to-purple-500/15", border: "border-indigo-500/20" },
-        { label: "إجمالي المبالغ", value: `${todayTotal.toFixed(2)} ج`, icon: "💵", color: "from-emerald-500/15 to-green-500/15", border: "border-emerald-500/20" },
-        { label: "ناجحة", value: successCount, icon: "✅", color: "from-cyan-500/15 to-blue-500/15", border: "border-cyan-500/20" },
-      ].map((stat, i) => (
+      {stats.map((stat, i) => (
         <div
           key={i}
-          className={`bg-gradient-to-br ${stat.color} border ${stat.border} rounded-2xl p-5 animate-slide-up`}
+          className={`bg-gradient-to-br ${stat.color} border ${stat.border} rounded-[2rem] p-6 animate-slide-up shadow-xl shadow-black/20`}
           style={{ animationDelay: `${i * 100}ms` }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-400">{stat.label}</p>
-              <p className="text-2xl font-bold mt-1">{stat.value}</p>
+              <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">{stat.label}</p>
+              <p className="text-3xl font-black">{stat.value}</p>
             </div>
-            <span className="text-3xl">{stat.icon}</span>
+            <span className="text-4xl filter drop-shadow-md">{stat.icon}</span>
           </div>
         </div>
       ))}
     </div>
   );
 }
+
 
 // ============ CATEGORY GRID ============
 function CategoryGrid({ onSelect }) {
@@ -135,6 +136,8 @@ function CategoryGrid({ onSelect }) {
   );
 }
 
+import { getServiceIcon } from "@/lib/serviceData";
+
 // ============ SERVICE LIST ============
 function ServiceList({ services, category, onSelect, onBack }) {
   if (!services || services.length === 0) {
@@ -162,24 +165,22 @@ function ServiceList({ services, category, onSelect, onBack }) {
         </h2>
         <span className="badge badge-info mr-auto">{services.length} خدمة</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {services.map((srv, i) => (
-          <button
-            key={srv.id}
-            onClick={() => onSelect(srv)}
-            className="card text-right flex items-center gap-3 animate-slide-up cursor-pointer"
-            style={{ animationDelay: `${i * 30}ms` }}
-          >
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-              <span className="text-xl">💼</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">{srv.name}</p>
-              <p className="text-xs text-slate-400 mt-1">كود: {srv.srv}</p>
-            </div>
-            <span className="text-slate-500">←</span>
-          </button>
-        ))}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {services.map((s, i) => {
+          const icon = getServiceIcon(s.name, s.ico);
+          return (
+            <button
+              key={s.id}
+              onClick={() => onSelect(s)}
+              className="card flex items-center gap-4 hover:border-indigo-500/50 transition-all text-right group"
+            >
+              <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-slate-800/50 group-hover:scale-110 transition-transform">
+                {typeof icon === 'string' ? <span className="text-2xl">{icon}</span> : icon}
+              </div>
+              <span className="text-sm font-bold truncate">{s.name}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -281,31 +282,40 @@ function ServiceExecution({ service, onBack, onTransaction }) {
 
       const res = await fetch("/api/payment", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+            "Content-Type": "application/json",
+            "x-merchant-id": JSON.parse(localStorage.getItem('drpay_user'))?.id || 'demo-merchant'
+        },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
       data._APIID = apiId;
       setPaymentResult(data);
-      setStep("result");
 
-      // Save transaction
-      onTransaction({
-        apiId,
-        service: service.name,
-        serviceCode: service.srv,
-        amount: data.VSA || inquiryResult?.VSA || 0,
-        status: data.ST,
-        bid: data.BID,
-        time: new Date().toLocaleString("ar-EG"),
-        response: data,
-      });
+      if (data.ST === "YES") {
+          setStep("result");
+          // Update transactions locally too
+          onTransaction({
+            apiId,
+            service: service.name,
+            serviceCode: service.srv,
+            amount: data.VSA || inquiryResult?.VSA || 0,
+            status: data.ST,
+            bid: data.BID,
+            time: new Date().toLocaleString("ar-EG"),
+            response: data,
+          });
+      } else {
+          setError(data.SMS || "فشلت العملية");
+          setStep("result");
+      }
     } catch {
       setError("خطأ في تنفيذ العملية");
     } finally {
       setLoading(false);
     }
   };
+
 
   // Render input fields based on service definition
   const renderInputs = () => {
@@ -557,44 +567,41 @@ function ServiceExecution({ service, onBack, onTransaction }) {
 
         {step === "inquiry" && inquiryResult && (
           <div className="space-y-4 animate-slide-up">
-            {/* Inquiry Info */}
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
-              <h3 className="text-sm font-bold text-emerald-400 mb-3 flex items-center gap-2">
-                <span>✅</span> نتيجة الاستعلام
-              </h3>
-              
-              {/* Main Info */}
-              {inquiryResult.SMS && (
-                <div className="mb-4 text-sm text-slate-200 bg-slate-800/50 p-3 rounded-xl border border-slate-700">
-                  {inquiryResult.SMS}
-                </div>
-              )}
+            {inquiryResult && (
+              <div className="glass rounded-2xl p-6 border-indigo-500/30 animate-scale-in">
+                <h3 className="text-lg font-bold mb-4 text-indigo-400">تفاصيل الاستعلام</h3>
+                <div className="space-y-4">
+                  {/* Dynamic mapping of inquiry results */}
+                  {Object.entries(inquiryResult).map(([key, value]) => {
+                    if (['ST', 'SMS', 'RES', 'AUTH'].includes(key)) return null;
+                    if (typeof value === 'object') return null;
+                    
+                    // Human readable names for common keys
+                    const labels = {
+                        val: 'القيمة المستحقة',
+                        NAM: 'اسم العميل',
+                        NUM: 'رقم الفاتورة',
+                        DAT: 'تاريخ الاستحقاق',
+                        ADR: 'العنوان',
+                    };
 
-              {/* Dynamic Info from Provider */}
-              {inquiryResult.info && (
-                <div className="space-y-2">
-                  {Object.entries(inquiryResult.info).map(([key, val], i) => (
-                    <div key={i} className="flex justify-between items-center py-2 border-b border-slate-700/30 last:border-0">
-                      <span className="text-sm text-slate-400">{key}</span>
-                      <span className="text-sm font-medium">{String(val)}</span>
+                    return (
+                      <div key={key} className="flex justify-between items-center border-b border-white/5 pb-2">
+                        <span className="text-sm text-slate-400">{labels[key] || key}</span>
+                        <span className="font-bold text-slate-100">{value}</span>
+                      </div>
+                    );
+                  })}
+                  
+                  {inquiryResult.val !== undefined && (
+                    <div className="pt-4 mt-2 border-t border-indigo-500/30">
+                       <label className="block text-xs text-slate-500 mb-1">المبلغ المطلوب دفعه</label>
+                       <p className="text-3xl font-black text-white">{inquiryResult.val} <span className="text-sm font-normal">ج.م</span></p>
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-
-              <div className="mt-3 pt-3 border-t border-slate-700/30">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-400">المبلغ المستحق</span>
-                  <span className="text-lg font-bold text-emerald-400">{(inquiryResult.VSA || inquiryResult.rvsa || 0)} ج.م</span>
-                </div>
-                {(inquiryResult.FEE > 0 || inquiryResult.fee > 0) && (
-                  <div className="flex justify-between items-center mt-1">
-                    <span className="text-xs text-slate-400">الرسوم</span>
-                    <span className="text-sm text-amber-400">{(inquiryResult.FEE || inquiryResult.fee)} ج.م</span>
-                  </div>
-                )}
               </div>
-            </div>
+            )}
 
             {error && (
               <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 text-red-400 text-sm">{error}</div>
@@ -622,29 +629,30 @@ function ServiceExecution({ service, onBack, onTransaction }) {
         )}
 
         {step === "result" && paymentResult && (
-          <div className="animate-slide-up text-center">
+          <div className="animate-slide-up">
             {paymentResult.ST === "YES" ? (
-              <div className="space-y-4">
-                <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/15 flex items-center justify-center pulse-glow">
-                  <span className="text-5xl">✅</span>
-                </div>
-                <h3 className="text-xl font-bold text-emerald-400">تمت العملية بنجاح!</h3>
-                <div className="bg-slate-800/50 rounded-2xl p-4 text-right space-y-2">
-                  {paymentResult.BID && (
-                    <div className="flex justify-between"><span className="text-slate-400 text-sm">رقم الفاتورة</span><span className="text-sm font-mono">{paymentResult.BID}</span></div>
-                  )}
-                  <div className="flex justify-between"><span className="text-slate-400 text-sm">معرف العملية</span><span className="text-sm font-mono">{paymentResult._APIID}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-400 text-sm">المبلغ</span><span className="font-bold text-emerald-400">{paymentResult.VSA} ج.م</span></div>
-                  {paymentResult.info?.map((inf, i) => (
-                    <div key={i} className="flex justify-between">
-                      <span className="text-slate-400 text-sm">{inf.name}</span>
-                      <span className="text-sm">{inf.value}</span>
+               <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/15 flex items-center justify-center mb-2">
+                      <span className="text-3xl">✅</span>
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <h3 className="text-lg font-bold text-emerald-400">عملية ناجحة</h3>
+                  </div>
+                  
+                  {/* Digital Receipt View */}
+                  <div className="max-h-[400px] overflow-y-auto rounded-3xl border border-white/5 bg-white/5">
+                      <ThermalReceipt data={{
+                          ...paymentResult,
+                          service_name: service.name,
+                          amount: paymentResult.VSA,
+                          total_amount: paymentResult.VSA,
+                          merchant_name: JSON.parse(localStorage.getItem('drpay_user'))?.name,
+                          created_at: new Date().toISOString()
+                      }} />
+                  </div>
+               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4 text-center py-10">
                 <div className="w-20 h-20 mx-auto rounded-full bg-red-500/15 flex items-center justify-center">
                   <span className="text-5xl">❌</span>
                 </div>
@@ -652,11 +660,12 @@ function ServiceExecution({ service, onBack, onTransaction }) {
                 <p className="text-slate-400">{paymentResult.SMS || "حدث خطأ أثناء تنفيذ العملية"}</p>
               </div>
             )}
-            <button onClick={onBack} className="btn-primary mt-6 w-full py-4">
+            <button onClick={onBack} className="btn-primary mt-6 w-full py-4 rounded-2xl font-bold shadow-lg shadow-indigo-600/20">
               <span>🏠</span> العودة للرئيسية
             </button>
           </div>
         )}
+
       </div>
     </div>
   );

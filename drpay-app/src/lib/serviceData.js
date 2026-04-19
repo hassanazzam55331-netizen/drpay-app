@@ -63,11 +63,17 @@ export function getSubCategories(menus, parentId) {
   return Object.values(menus).filter(m => m.sid === parentId);
 }
 
+import { getBrandLogo } from './logos';
+
 // Icon helper for service icons
-export function getServiceIcon(ico) {
+export function getServiceIcon(name, ico) {
+  // Try branded logo first
+  const branded = getBrandLogo(name);
+  if (branded) return branded;
+
+  // Fallback to defaults
   if (!ico) return "💼";
-  if (ico.startsWith("fas ")) return null; // FontAwesome - handle differently
-  return null; // Image icon
+  return null; // Image icon handled in component
 }
 
 // Egyptian governorate codes from phone prefix

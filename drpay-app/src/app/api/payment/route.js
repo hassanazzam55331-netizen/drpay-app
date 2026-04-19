@@ -1,39 +1,76 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import { agentRequest } from '@/lib/agent';
-
 export async function POST(request) {
   try {
     const body = await request.json();
     const { srv, APIID, ...fields } = body;
+    const merchantId = request.headers.get('x-merchant-id') || 'demo-merchant'; // Identify payer
 
-    const data = await agentRequest(srv, 'PAY', { APIID, ...fields });
+    // 1. Fetch Merchant Balance & System Mode
+    const { data: profile } = await supabase.from('profiles').select('balance').eq('id', merchantId).single();
+    const { data: modeConfig } = await supabase.from('system_settings').select('value').eq('key', 'PAYMENT_MODE').single();
+    
+    const amount = parseFloat(fields.avsa || 0);
+    const balance = parseFloat(profile?.balance || 0);
+    const mode = modeConfig?.value?.mode || 'FULL_SYNC'; // FULL_SYNC or LOCAL_ONLY
 
-    // Log to Supabase if config is available
-    try {
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://your-project.supabase.co') {
-        const total_amount = data.VSA || fields.avsa || 0;
-        await supabase.from('transactions').insert([{
-          api_id: APIID,
-          service_name: fields.service_name || 'Service',
-          service_code: srv,
-          amount: total_amount,
-          total_amount: total_amount,
-          status: data.ST,
-          bid: data.BID,
-          mobile: fields.cmob || fields.tel || fields.payMOB,
-          response_data: data
-        }]);
-      }
-    } catch (dbError) {
-      console.error('Database logging failed:', dbError);
+    // 2. Local Balance Check
+    if (balance < amount) {
+        return NextResponse.json({ 
+            ST: 'ERR', 
+            SMS: 'عذراً، رصيدك غير كافٍ لإتمام هذه العملية. يرجى شحن الرصيد.',
+            code: 'INSUFFICIENT_FUNDS' 
+        }, { status: 402 });
     }
 
-    return NextResponse.json(data);
+    let externalResponse = { ST: 'YES', VSA: amount, BID: 'LOCAL-' + Date.now() };
+
+    // 3. Conditional External Execution
+    if (mode === 'FULL_SYNC') {
+        externalResponse = await agentRequest(srv, 'PAY', { APIID, ...fields });
+    }
+
+    // 4. Handle Success & Local Deduction
+    if (externalResponse.ST === 'YES') {
+        const finalAmount = parseFloat(externalResponse.VSA || amount);
+        
+        // Deduct from local balance (Atomic update)
+        await supabase.rpc('deduct_balance', { 
+            m_id: merchantId, 
+            amount: finalAmount 
+        });
+
+        // Log Transaction
+        await supabase.from('transactions').insert([{
+            api_id: APIID,
+            merchant_id: merchantId,
+            service_name: fields.service_name || 'Service',
+            service_code: srv,
+            amount: finalAmount,
+            total_amount: finalAmount,
+            status: 'YES',
+            bid: externalResponse.BID,
+            mobile: fields.cmob || fields.tel || fields.payMOB,
+            provider_response: externalResponse
+        }]);
+    } else {
+        // Log Failed Attempt
+        await supabase.from('transactions').insert([{
+            api_id: APIID,
+            merchant_id: merchantId,
+            service_name: fields.service_name || 'Service',
+            service_code: srv,
+            amount: amount,
+            total_amount: amount,
+            status: 'ERR',
+            provider_response: externalResponse
+        }]);
+    }
+
+    return NextResponse.json(externalResponse);
   } catch (error) {
     console.error('Payment error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ST: 'ERR', SMS: error.message }, { status: 500 });
   }
 }
+
 
 

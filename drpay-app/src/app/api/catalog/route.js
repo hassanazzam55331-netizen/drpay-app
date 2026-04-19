@@ -1,27 +1,41 @@
-import { NextResponse } from 'next/server';
-import catalogData from '@/lib/catalog.json';
+import { supabase } from '@/lib/supabase';
+import { agentRequest } from '@/lib/agent';
 
-// Serve catalog - try remote first, fallback to local
 export async function GET() {
   try {
-    // Try fetching from remote first
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
+    // 1. Fetch official catalog via agent
+    const catalog = await agentRequest('GetCatalog', 'QRY');
 
-    const res = await fetch('https://wifi.e-misr.com/ICO/js/sl.php', {
-      signal: controller.signal,
-    }).catch(() => null);
-
-    clearTimeout(timeout);
-
-    if (res && res.ok) {
-      const data = await res.json();
-      return NextResponse.json(data);
+    // 2. Fetch local admin overrides
+    const { data: overrides } = await supabase.from('service_overrides').select('*');
+    
+    if (catalog.menus && overrides) {
+        // Apply overrides to the catalog
+        Object.keys(catalog.menus).forEach(menuKey => {
+            const menu = catalog.menus[menuKey];
+            if (menu.services) {
+                Object.keys(menu.services).forEach(srvKey => {
+                    const srv = menu.services[srvKey];
+                    const override = overrides.find(o => o.service_code === srv.srv.toString());
+                    
+                    if (override) {
+                        if (override.custom_fee !== null && override.custom_fee !== undefined) {
+                            srv.fee = override.custom_fee;
+                        }
+                        if (override.is_active === false) {
+                            srv.disabled = true;
+                        }
+                    }
+                });
+            }
+        });
     }
-  } catch {
-    // Fall through to local
-  }
 
-  // Fallback to local catalog data
-  return NextResponse.json(catalogData);
+    return NextResponse.json(catalog);
+  } catch (error) {
+    console.error('Catalog API Error:', error);
+    // Fallback to local data is handled by the agentRequest internals if needed
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
+
