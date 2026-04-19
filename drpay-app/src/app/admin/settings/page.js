@@ -11,7 +11,9 @@ export default function AdminSettings() {
         PHONE: '',
         NATID: ''
     });
-    const [systemMode, setSystemMode] = useState('FULL_SYNC'); // FULL_SYNC or LOCAL_ONLY
+    const [systemMode, setSystemMode] = useState('FULL_SYNC');
+    const [maintenance, setMaintenance] = useState(false);
+    const [notice, setNotice] = useState('');
     const [loading, setLoading] = useState(true);
     const [testStatus, setTestStatus] = useState(null);
 
@@ -26,6 +28,8 @@ export default function AdminSettings() {
             const data = await res.json();
             if (data.credentials) setCreds(data.credentials);
             if (data.paymentMode) setSystemMode(data.paymentMode.mode || 'FULL_SYNC');
+            if (data.maintenance_mode !== undefined) setMaintenance(data.maintenance_mode);
+            if (data.global_notice) setNotice(data.global_notice);
             setLoading(false);
 
         } catch (e) {
@@ -40,9 +44,11 @@ export default function AdminSettings() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    do: isTest ? 'test' : 'save', 
+                    action: isTest ? 'test' : 'save', 
                     credentials: creds,
-                    paymentMode: { mode: systemMode }
+                    paymentMode: { mode: systemMode },
+                    maintenance_mode: maintenance,
+                    global_notice: notice
                 })
 
             });
@@ -173,6 +179,32 @@ export default function AdminSettings() {
                             {testStatus.error && <p className="mt-1 text-xs">{testStatus.error}</p>}
                         </div>
                     )}
+                    
+                    <div className="space-y-4 pt-6 border-t border-white/5">
+                        <div className="flex items-center justify-between p-4 glass rounded-2xl">
+                            <div>
+                                <p className="font-bold text-sm">وضع الصيانة (Maintenance Mode)</p>
+                                <p className="text-[10px] text-slate-500">منع التجار من إجراء أي عمليات حالياً</p>
+                            </div>
+                            <button 
+                                onClick={() => setMaintenance(!maintenance)}
+                                className={`px-4 py-2 rounded-xl text-[10px] font-bold ${maintenance ? 'bg-red-500 text-white' : 'bg-slate-800 text-slate-400'}`}
+                            >
+                                {maintenance ? 'مفعل' : 'معطل'}
+                            </button>
+                        </div>
+                        
+                        <div className="space-y-2">
+                             <label className="text-xs text-slate-500 uppercase">إشعار النظام العام (Global Notice)</label>
+                             <input 
+                                type="text" 
+                                value={notice}
+                                onChange={e => setNotice(e.target.value)}
+                                className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 focus:border-indigo-500 outline-none"
+                                placeholder="مرحباً بكم في منصة Dr. Pay..."
+                             />
+                        </div>
+                    </div>
 
                     <div className="flex gap-4 pt-4">
                         <button 

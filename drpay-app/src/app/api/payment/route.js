@@ -32,10 +32,12 @@ export async function POST(request) {
     if (externalResponse.ST === 'YES') {
         const finalAmount = parseFloat(externalResponse.VSA || amount);
         
-        // Deduct from local balance (Atomic update)
-        await supabase.rpc('deduct_balance', { 
-            m_id: merchantId, 
-            amount: finalAmount 
+        // 3. Deduct locally with Ledger Logging
+        const { error: deductError } = await supabase.rpc('deduct_balance_v2', {
+          p_merchant_id: merchantId,
+          p_amount: finalAmount,
+          p_ref_id: APIID,
+          p_desc: `دفع خدمة: ${fields.service_name || 'Service'}`
         });
 
         // Log Transaction

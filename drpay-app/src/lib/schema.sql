@@ -135,6 +135,7 @@ INSERT INTO system_settings (key, value) VALUES
 ('global_notice', '"Welcome to Dr. Pay Professional Platform"')
 ON CONFLICT (key) DO NOTHING;
 
+
 -- 10. SERVICE OVERRIDES (Custom Fees & Status)
 CREATE TABLE IF NOT EXISTS service_overrides (
     service_code TEXT PRIMARY KEY,
@@ -142,3 +143,85 @@ CREATE TABLE IF NOT EXISTS service_overrides (
     custom_fee DECIMAL(12, 2),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 11. AUDIT LEDGER (Financial Trail)
+CREATE TABLE IF NOT EXISTS audit_ledger (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    merchant_id UUID REFERENCES profiles(id),
+    type TEXT NOT NULL, -- payment, deposit, refund, withdrawal
+    amount DECIMAL(12, 2) NOT NULL,
+    balance_before DECIMAL(12, 2) NOT NULL,
+    balance_after DECIMAL(12, 2) NOT NULL,
+    reference_id TEXT, -- transaction id or deposit id
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 12. WITHDRAWALS
+CREATE TABLE IF NOT EXISTS withdrawals (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    merchant_id UUID REFERENCES profiles(id),
+    amount DECIMAL(12, 2) NOT NULL,
+    method TEXT NOT NULL,
+    status TEXT DEFAULT 'pending', -- pending, processed, rejected
+    processed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 13. NOTIFICATIONS
+CREATE TABLE IF NOT EXISTS notifications (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES profiles(id),
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 14. RECEIPT ARCHIVE
+CREATE TABLE IF NOT EXISTS receipt_archive (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    transaction_id UUID REFERENCES transactions(id),
+    merchant_id UUID REFERENCES profiles(id),
+    receipt_json JSONB NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 15. UPDATED RPC FUNCTIONS WITH LEDGER LOGGING
+CREATE OR REPLACE FUNCTION deduct_balance_v2(p_merchant_id UUID, p_amount DECIMAL, p_ref_id TEXT, p_desc TEXT)
+RETURNS VOID AS $$
+DECLARE
+    v_balance_before DECIMAL;
+    v_balance_after DECIMAL;
+BEGIN
+    SELECT balance INTO v_balance_before FROM profiles WHERE id = p_merchant_id FOR UPDATE;
+    
+    IF v_balance_before < p_amount THEN
+        RAISE EXCEPTION 'Insufficient balance';
+    END IF;
+    
+    v_balance_after := v_balance_before - p_amount;
+    
+    UPDATE profiles SET balance = v_balance_after WHERE id = p_merchant_id;
+    
+    INSERT INTO audit_ledger (merchant_id, type, amount, balance_before, balance_after, reference_id, description)
+    VALUES (p_merchant_id, 'payment', -p_amount, v_balance_before, v_balance_after, p_ref_id, p_desc);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION add_balance_v2(p_merchant_id UUID, p_amount DECIMAL, p_ref_id TEXT, p_desc TEXT, p_type TEXT DEFAULT 'deposit')
+RETURNS VOID AS $$
+DECLARE
+    v_balance_before DECIMAL;
+    v_balance_after DECIMAL;
+BEGIN
+    SELECT balance INTO v_balance_before FROM profiles WHERE id = p_merchant_id FOR UPDATE;
+    
+    v_balance_after := v_balance_before + p_amount;
+    
+    UPDATE profiles SET balance = v_balance_after WHERE id = p_merchant_id;
+    
+    INSERT INTO audit_ledger (merchant_id, type, amount, balance_before, balance_after, reference_id, description)
+    VALUES (p_merchant_id, p_type, p_amount, v_balance_before, v_balance_after, p_ref_id, p_desc);
+END;
+$$ LANGUAGE plpgsql;

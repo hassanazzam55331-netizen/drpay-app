@@ -12,6 +12,7 @@ function Sidebar({ activeTab, setActiveTab }) {
     { id: "services", icon: "📋", label: "الخدمات" },
     { id: "transactions", icon: "📊", label: "العمليات" },
     { id: "deposits", icon: "💰", label: "الإيداعات" },
+    { id: "withdrawals", icon: "🏧", label: "سحب الأرباح" },
     { id: "support", icon: "🎧", label: "الدعم الفني" },
     { id: "settings", icon: "⚙️", label: "الإعدادات" },
   ];
@@ -868,7 +869,88 @@ function SupportView() {
   );
 }
 
-// ============ MAIN DASHBOARD ============
+// ============ WITHDRAWALS VIEW ============
+function WithdrawalsView() {
+  const [withdrawals, setWithdrawals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [amount, setAmount] = useState("");
+  const [method, setMethod] = useState("bank");
+
+  useEffect(() => { fetchWithdrawals(); }, []);
+
+  const fetchWithdrawals = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("drpay_user"));
+      const res = await fetch(`/api/merchant/withdrawals?merchant_id=${user.id}`);
+      const data = await res.json();
+      if (data.success) setWithdrawals(data.withdrawals);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  };
+
+  const handleWithdrawRequest = async (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("drpay_user"));
+    try {
+      const res = await fetch("/api/merchant/withdrawals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ merchant_id: user.id, amount: parseFloat(amount), method }),
+      });
+      if (res.ok) {
+        setAmount(""); fetchWithdrawals();
+        alert("تم إرسال طلب السحب بنجاح");
+      } else {
+          const err = await res.json();
+          alert(err.error || "فشل الطلب");
+      }
+    } catch (e) { alert("فشل الاتصال"); }
+  };
+
+  return (
+    <div className="animate-fade-in grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="glass rounded-3xl p-6 border-amber-500/20">
+        <h3 className="text-xl font-bold mb-6 flex items-center gap-2"><span>🏧</span> طلب سحب أرباح</h3>
+        <form onSubmit={handleWithdrawRequest} className="space-y-4">
+          <div>
+            <label className="block text-sm text-slate-400 mb-2">طريقة الاستلام</label>
+            <select className="input-field" value={method} onChange={e => setMethod(e.target.value)}>
+              <option value="bank">حساب بنكي</option>
+              <option value="vodafone">محفظة إلكترونية</option>
+              <option value="cash">استلام نقدي</option>
+            </select>
+          </div>
+          <div>
+              <label className="block text-sm text-slate-400 mb-2">المبلغ المطلوب سحبه</label>
+              <input type="number" className="input-field" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" required />
+          </div>
+          <button type="submit" className="btn-primary w-full py-4 text-white font-bold">تأكيد طلب السحب</button>
+        </form>
+      </div>
+
+      <div className="glass rounded-3xl p-6">
+        <h3 className="text-xl font-bold mb-6">سجل طلبات السحب</h3>
+        <div className="space-y-3">
+          {loading ? [1,2,3].map(i => <div key={i} className="h-16 shimmer rounded-2xl" />) :
+           withdrawals.length === 0 ? <p className="text-center text-slate-500 py-10">لا توجد طلبات سحب سابقة</p> :
+           withdrawals.map((w, i) => (
+            <div key={i} className="flex justify-between items-center p-4 rounded-2xl border border-white/5 bg-white/5">
+              <div>
+                <p className="font-bold">{w.amount} ج.م</p>
+                <p className="text-[10px] text-slate-500">{w.method} • {new Date(w.created_at).toLocaleDateString('ar-EG')}</p>
+              </div>
+              <span className={`badge ${w.status === 'processed' ? 'badge-success' : w.status === 'rejected' ? 'badge-danger' : 'badge-info'}`}>
+                {w.status === 'processed' ? 'تم التنفيذ' : w.status === 'rejected' ? 'مرفوض' : 'قيد المراجعة'}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============ SETTINGS VIEW ============
 function SettingsView() {
   return (
     <div className="animate-fade-in max-w-lg">
@@ -911,6 +993,15 @@ export default function DashboardPage() {
   const [transactions, setTransactions] = useState([]);
 
   const [search, setSearch] = useState("");
+  const [maintenance, setMaintenance] = useState(false);
+  const [notice, setNotice] = useState("");
+
+  useEffect(() => {
+    fetch('/api/admin/config').then(r => r.json()).then(d => {
+      if (d.maintenance_mode !== undefined) setMaintenance(d.maintenance_mode);
+      if (d.global_notice) setNotice(d.global_notice);
+    });
+  }, []);
   const [allServices, setAllServices] = useState([]);
   const [dailySummary, setDailySummary] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(true);
@@ -1043,7 +1134,17 @@ export default function DashboardPage() {
 
         {/* Universal Search Bar */}
         {(activeTab === "home" || activeTab === "services") && !selectedService && (
-            <div className="mb-8 relative max-w-2xl animate-slide-up">
+            <div className="mb-8 relative max-w-2xl animate-fade-in">
+                {notice && (
+                    <div className="glass p-4 rounded-2xl mb-6 bg-indigo-600/10 border-indigo-500/20 text-indigo-400 text-xs font-bold animate-pulse">
+                        📣 {notice}
+                    </div>
+                )}
+                {maintenance && (
+                    <div className="glass p-6 rounded-3xl mb-6 bg-red-600/10 border-red-500/20 text-red-500 text-sm font-bold">
+                        ⚠️ النظام حالياً في وضع الصيانة. يرجى المحاولة لاحقاً.
+                    </div>
+                )}
                 <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">🔍</span>
                 <input 
                     type="text"
@@ -1105,8 +1206,62 @@ export default function DashboardPage() {
           <SupportView />
         )}
 
+        {activeTab === "withdrawals" && (
+          <WithdrawalsView />
+        )}
+
         {activeTab === "settings" && <SettingsView />}
       </main>
     </div>
   );
+}
+
+function NotificationBell() {
+    const [notifs, setNotifs] = useState([]);
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("drpay_user"));
+        fetch(`/api/notifications?user_id=${user.id}`).then(r => r.json()).then(d => {
+            if (d.notifications) setNotifs(d.notifications);
+        });
+    }, []);
+
+    const markRead = async (id) => {
+        await fetch('/api/notifications', {
+            method: 'POST',
+            body: JSON.stringify({ id, action: 'mark_read' })
+        });
+        setNotifs(notifs.map(n => n.id === id ? { ...n, is_read: true } : n));
+    };
+
+    const unreadCount = notifs.filter(n => !n.is_read).length;
+
+    return (
+        <div className="relative">
+            <button onClick={() => setOpen(!open)} className="relative p-2 rounded-xl hover:bg-white/5 transition-colors">
+                <span className="text-xl">🔔</span>
+                {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[8px] flex items-center justify-center rounded-full font-bold border-2 border-slate-950 animate-bounce">
+                        {unreadCount}
+                    </span>
+                )}
+            </button>
+            
+            {open && (
+                <div className="absolute top-full left-0 mt-2 w-72 glass rounded-2xl shadow-2xl p-4 z-[100] border-white/5 animate-scale-in">
+                    <h4 className="text-sm font-bold mb-4 border-b border-white/5 pb-2">الإشعارات</h4>
+                    <div className="space-y-3 max-h-60 overflow-y-auto">
+                        {notifs.length === 0 ? <p className="text-[10px] text-slate-500 py-4 text-center">لا توجد إشعارات</p> :
+                         notifs.map(n => (
+                            <div key={n.id} onClick={() => markRead(n.id)} className={`p-3 rounded-xl cursor-pointer transition-colors ${n.is_read ? 'opacity-40' : 'bg-white/5 hover:bg-white/10'}`}>
+                                <p className="font-bold text-[10px]">{n.title}</p>
+                                <p className="text-[10px] text-slate-400">{n.message}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }

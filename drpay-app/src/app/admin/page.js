@@ -58,6 +58,7 @@ export default function AdminDashboard() {
           <h1 className="text-xl font-bold gradient-text">لوحة التحكم (المدير)</h1>
         </div>
         <div className="flex items-center gap-4">
+          <NotificationBell />
           <button onClick={logout} className="text-sm text-red-400 hover:text-red-300">خروج</button>
         </div>
       </nav>
@@ -218,4 +219,55 @@ export default function AdminDashboard() {
       `}</style>
     </div>
   );
+}
+
+function NotificationBell() {
+    const [notifs, setNotifs] = useState([]);
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("drpay_user") || "{}");
+        if (!user.id) return;
+        fetch(`/api/notifications?user_id=${user.id}`).then(r => r.json()).then(d => {
+            if (d.notifications) setNotifs(d.notifications);
+        });
+    }, []);
+
+    const markRead = async (id) => {
+        await fetch('/api/notifications', {
+            method: 'POST',
+            body: JSON.stringify({ id, action: 'mark_read' })
+        });
+        setNotifs(notifs.map(n => n.id === id ? { ...n, is_read: true } : n));
+    };
+
+    const unreadCount = notifs.filter(n => !n.is_read).length;
+
+    return (
+        <div className="relative">
+            <button onClick={() => setOpen(!open)} className="relative p-2 rounded-xl hover:bg-white/5 transition-colors">
+                <span className="text-xl">🔔</span>
+                {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[8px] flex items-center justify-center rounded-full font-bold border-2 border-slate-950 animate-bounce">
+                        {unreadCount}
+                    </span>
+                )}
+            </button>
+            
+            {open && (
+                <div className="absolute top-full left-0 mt-2 w-72 glass rounded-2xl shadow-2xl p-4 z-[100] border-white/5 animate-scale-in">
+                    <h4 className="text-sm font-bold mb-4 border-b border-white/5 pb-2">الإشعارات</h4>
+                    <div className="space-y-3 max-h-60 overflow-y-auto">
+                        {notifs.length === 0 ? <p className="text-[10px] text-slate-500 py-4 text-center">لا توجد إشعارات</p> :
+                         notifs.map(n => (
+                            <div key={n.id} onClick={() => markRead(n.id)} className={`p-3 rounded-xl cursor-pointer transition-colors ${n.is_read ? 'opacity-40' : 'bg-white/5 hover:bg-white/10'}`}>
+                                <p className="font-bold text-[10px]">{n.title}</p>
+                                <p className="text-[10px] text-slate-400">{n.message}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
