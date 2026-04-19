@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "65227430-3497-46ad-a9ab-7a82d3fcc0ab",
+		"name": "خيارات الحساب",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42345166",
+		"_collection_link": "https://www.postman.com/connectpay/cashmisr-api-v2/collection/hj4ptci/?action=share&source=collection_link&creator=42345166"
+	},
+	"item": [
+		{
+			"name": "استعلام عن الرصيد",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"GetBalance\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.e-misr.com/ajax.php",
+					"protocol": "https",
+					"host": [
+						"api",
+						"e-misr",
+						"com"
+					],
+					"path": [
+						"ajax.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "فحص الفاتورة",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"chk\",\r\n    \"cmob\": \"01010211121\",\r\n    \"sdate\": \"2022-10-01\",\r\n    \"edate\": \"2022-10-15\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.e-misr.com/ajax.php",
+					"protocol": "https",
+					"host": [
+						"api",
+						"e-misr",
+						"com"
+					],
+					"path": [
+						"ajax.php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

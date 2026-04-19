@@ -1,0 +1,338 @@
+{
+	"info": {
+		"_postman_id": "684d1ab0-c43a-4d6f-b67f-56a013148f45",
+		"name": "Cash Collection",
+		"description": "ERROR DESCRIPTION\n\n---\n\n\\-1 MISSING_AUTH_DATA  \n\\-2 DATABASE_CONNECTION_ERROR  \n\\-3 INVALID_AUTH_DATA  \n\\-4 SERVICE_NOT_ALLOWED  \n\\-101 Failed Inquiry  \n\\-201 Failed Payment\n\n---\n\nAll http response code will be **200** else in **INQUIRY** you can retry and if it in **PAYMENT** you consider it success\n\n---\n\nyou can check status of any transaction with your APIID (API Transaction ID) any time\n\n---\n\nretry will be with same APIID and in same day only",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42345166",
+		"_collection_link": "https://www.postman.com/connectpay/cash-collection/collection/5iluza0/cash-collection?action=share&source=collection_link&creator=42345166"
+	},
+	"item": [
+		{
+			"name": "Inquiry",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AID\": \"996\",\r\n    \"PWD\": \"C7L@-0z9VuX7S\",\r\n    \"BIN\": \"9960\",\r\n    \"srv\": \"tmny\",\r\n    \"cmob\": \"01221244790\",\r\n    \"do\": \"QRY\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.e-misr.com/json-v2.php",
+					"protocol": "https",
+					"host": [
+						"api",
+						"e-misr",
+						"com"
+					],
+					"path": [
+						"json-v2.php"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Inquiry",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": \"996\",\r\n    \"PWD\": \"C7L@-0z9VuX7S\",\r\n    \"BIN\": \"9960\",\r\n    \"srv\": \"tmny\",\r\n    \"cmob\": \"01221244790\",\r\n    \"do\": \"QRY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/json-v2.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"json-v2.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 22 Jan 2023 21:17:21 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=Y%2BsECGrwnHFZp%2BOKKD7%2FF9BFWz9dysL5hfaFHrorUD717NarnnHhCJVFidL1jp3IfQXk7PGi3foGLMzY7EfnKq5rsHbP6gv06Wz%2FDVKMZLEiP5AFcrcqc%2Br4yLwD8Y1wog%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "78db50dedd0241b8-MRS"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"ST\": \"INF\",\n    \"rVSA\": \"0.0000\",\n    \"srv\": \"tmny\",\n    \"cmob\": \"01221244790\",\n    \"VSA\": 1000,\n    \"FEE\": 0,\n    \"CUT\": 997,\n    \"NXT\": \"PAY\",\n    \"info\": [\n        {\n            \"name\": \"العميل\",\n            \"value\": \"محلات يامسهل\"\n        },\n        {\n            \"name\": \"النوع\",\n            \"value\": \"وكيل معتمد\"\n        },\n        {\n            \"name\": \"الاستحقاق\",\n            \"value\": \"2023-01-25\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AID\": \"996\",\r\n    \"PWD\": \"C7L@-0z9VuX7S\",\r\n    \"BIN\": \"9960\",\r\n    \"srv\": \"tmny\",\r\n    \"cmob\": \"01221244790\",\r\n    \"avsa\": 500,\r\n    \"APIID\": \"Your_Transaction_ID\",\r\n    \"do\": \"PAY\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.e-misr.com/json-v2.php",
+					"protocol": "https",
+					"host": [
+						"api",
+						"e-misr",
+						"com"
+					],
+					"path": [
+						"json-v2.php"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Payment",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": \"996\",\r\n    \"PWD\": \"C7L@-0z9VuX7S\",\r\n    \"BIN\": \"9960\",\r\n    \"srv\": \"tmny\",\r\n    \"cmob\": \"01221244790\",\r\n    \"avsa\": 500,\r\n    \"APIID\": \"Your_Transaction_ID\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/json-v2.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"json-v2.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 22 Jan 2023 21:31:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=nFE95IYhBbq5aWZjwSWvy4QzOxMRK3jbzR93neelby1cIKtnyrCmk8JKVUALnmtM0o2ANpFRqT065ymgG%2B%2B7vRRLsokVakHXFqH4888rx4bV%2Bz3J%2FCMNx6uN2XfrO5lSxg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "78db664efe420c44-MRS"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": -498.5,\n    \"srv\": \"tmny\",\n    \"cmob\": \"01221244790\",\n    \"VSA\": 500,\n    \"FEE\": 0,\n    \"CUT\": 498.5,\n    \"BID\": \"194116936\",\n    \"PID\": \"230122233159\",\n    \"info\": [\n        {\n            \"name\": \"العميل\",\n            \"value\": \"محلات يامسهل\"\n        },\n        {\n            \"name\": \"النوع\",\n            \"value\": \"وكيل معتمد\"\n        },\n        {\n            \"name\": \"الاستحقاق\",\n            \"value\": \"2023-01-25\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Payment",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": \"996\",\r\n    \"PWD\": \"C7L@-0z9VuX7S\",\r\n    \"BIN\": \"9960\",\r\n    \"srv\": \"tmny\",\r\n    \"cmob\": \"01221244790\",\r\n    \"avsa\": 100,\r\n    \"APIID\": \"Your_Transaction_ID\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/json-v2.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"json-v2.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 22 Jan 2023 21:32:57 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=iJVG3VhUlSWa%2BsQ8A0QNgbPPBZDcviMZJnivsRQloT7P2XYmoSNLlc7y7aWGmTuDtr8nuJLIkkOfSzpfdsmVDGeOtLYm2wtgCBmbM8Jp5NiNvjnMFwiCMcOe7N15GIS0ng%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "78db67ba3d7f0c44-MRS"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"ST\": \"ERR\",\n    \"NUM\": \"-201\",\n    \"SMS\": \"الحد الادني للسداد هو 300ج\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Check Status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AID\": \"996\",\r\n    \"PWD\": \"C7L@-0z9VuX7S\",\r\n    \"BIN\": \"9960\",\r\n    \"srv\": \"chkst\",\r\n    \"APIID\": \"Your_Transaction_ID\",\r\n    \"do\": \"QRY\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.e-misr.com/json-v2.php",
+					"protocol": "https",
+					"host": [
+						"api",
+						"e-misr",
+						"com"
+					],
+					"path": [
+						"json-v2.php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

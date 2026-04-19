@@ -1,0 +1,2760 @@
+{
+	"info": {
+		"_postman_id": "a0f52cf8-46ab-43cb-b84c-42adb016f553",
+		"name": "سداد الخدمات",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42345166",
+		"_collection_link": "https://www.postman.com/connectpay/cashmisr-api-v2/collection/mzeibwj/?action=share&source=collection_link&creator=42345166"
+	},
+	"item": [
+		{
+			"name": "اقساط القروض",
+			"item": [
+				{
+					"name": "وفرها.كوم",
+					"item": [
+						{
+							"name": "الاستعلام",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php?AID=1011&PWD=1011&BIN=1011&srv=f333&cmob=01111010423",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									],
+									"query": [
+										{
+											"key": "AID",
+											"value": "1011"
+										},
+										{
+											"key": "PWD",
+											"value": "1011"
+										},
+										{
+											"key": "BIN",
+											"value": "1011"
+										},
+										{
+											"key": "srv",
+											"value": "f333"
+										},
+										{
+											"key": "cmob",
+											"value": "01111010423"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "الاستعلام",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "AID",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "PWD",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "BIN",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "reqType",
+													"value": "API",
+													"type": "text"
+												},
+												{
+													"key": "srv",
+													"value": "f333",
+													"type": "text"
+												},
+												{
+													"key": "cmob",
+													"value": "01111010423",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.e-misr.com/ajax.php",
+											"protocol": "https",
+											"host": [
+												"api",
+												"e-misr",
+												"com"
+											],
+											"path": [
+												"ajax.php"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 31 Jan 2022 17:40:31 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json;charset=UTF-8"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+										},
+										{
+											"key": "Report-To",
+											"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=SDpBdB%2FNIne9ODBKmI2wJPZNUUvtbVhw9XdTPmVWsVK0fkby%2FrL3RqTsXT4fNKTiYa%2F0HAJWCa%2Bv7nRbbK0NJMFvVoI2ORDpYKmQKrVafneHV67JF%2FxBRRgNGUYxsPcyow%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "NEL",
+											"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "6d64b9bf9a3c407b-CDG"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "alt-svc",
+											"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"ST\": \"INF\",\n    \"srv\": \"f333\",\n    \"rVSA\": \"1500.25\",\n    \"MOB\": \"01111010423\",\n    \"VSA\": \"245.50\",\n    \"FEE\": \"4.5\",\n    \"CPRID\": \"ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==\",\n    \"EBI\": \"الاسم: احمد محمد محمود;\",\n    \"NXT\": \"PAY\",\n    \"BTN\": \"سداد\",\n    \"data\": {}\n}"
+								}
+							]
+						},
+						{
+							"name": "السداد",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "AID",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "PWD",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "BIN",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "srv",
+											"value": "f333",
+											"type": "text"
+										},
+										{
+											"key": "cmob",
+											"value": "01111010423",
+											"type": "text"
+										},
+										{
+											"key": "reqType",
+											"value": "API",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "السداد",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "AID",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "PWD",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "BIN",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "reqType",
+													"value": "API",
+													"type": "text"
+												},
+												{
+													"key": "srv",
+													"value": "f333",
+													"type": "text"
+												},
+												{
+													"key": "cmob",
+													"value": "01111010423",
+													"type": "text"
+												},
+												{
+													"key": "do",
+													"value": "PAY",
+													"description": "امر الدفع",
+													"type": "text"
+												},
+												{
+													"key": "CPRID",
+													"value": "ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==",
+													"description": "تحصل عليها من الاستعلام",
+													"type": "text"
+												},
+												{
+													"key": "APIID",
+													"value": "123456",
+													"description": "رقم الفاتورة علي نظامك انت",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.e-misr.com/ajax.php",
+											"protocol": "https",
+											"host": [
+												"api",
+												"e-misr",
+												"com"
+											],
+											"path": [
+												"ajax.php"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 31 Jan 2022 17:39:36 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json;charset=UTF-8"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+										},
+										{
+											"key": "Report-To",
+											"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=LRkJcv1zKYRiI5KxFlTqJ5NdIlZf9tMlbmsWF2D5tC5Qnwwp2U0JPapPk5p6CR%2Bjd2lMYZomyzy9ddluUEKjFszxZTmpSukgxbCU07TidrKJ6kA4H9G6KQ6XVk943yHnrg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "NEL",
+											"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "6d64b86afa90407b-CDG"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "alt-svc",
+											"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": \"1250.25\",\n    \"MOB\": \"01111010423\",\n    \"VSA\": \"245.50\",\n    \"FEE\": \"4.5\",\n    \"CUT\": \"248.50\",\n    \"EBI\": \"الاسم: احمد محمد محمود;\",\n    \"BID\": \"123456\",\n    \"PID\": \"987654321\",\n    \"data\": {}\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "مدفوعات اكسبت",
+					"item": [
+						{
+							"name": "الاستعلام",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "AID",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "PWD",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "BIN",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "reqType",
+											"value": "API",
+											"type": "text"
+										},
+										{
+											"key": "srv",
+											"value": "acpt",
+											"type": "text"
+										},
+										{
+											"key": "cmob",
+											"value": "01111010423",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "الاستعلام",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "AID",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "PWD",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "BIN",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "reqType",
+													"value": "API",
+													"type": "text"
+												},
+												{
+													"key": "srv",
+													"value": "acpt",
+													"type": "text"
+												},
+												{
+													"key": "cmob",
+													"value": "01111010423",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.e-misr.com/ajax.php",
+											"protocol": "https",
+											"host": [
+												"api",
+												"e-misr",
+												"com"
+											],
+											"path": [
+												"ajax.php"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 31 Jan 2022 18:14:14 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json;charset=UTF-8"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+										},
+										{
+											"key": "Report-To",
+											"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=fIyVfmlR1%2BPyontBLw9%2Bs7AJKZLRcGLiPqa2AVFo%2B1zwVF6QrLM6vdUo5W%2BIib2Woz2xqrcB7GPaEU%2BoY2Ec7DVeFMHNN9Eb4x%2FbmbtajsN3Su42rLUpuhA6pa3WV5fp2A%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "NEL",
+											"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "6d64eb267ef011b3-BCN"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "alt-svc",
+											"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"ST\": \"INF\",\n    \"srv\": \"f333\",\n    \"rVSA\": \"1500.25\",\n    \"MOB\": \"01111010423\",\n    \"VSA\": \"97\",\n    \"FEE\": \"3\",\n    \"CPRID\": \"ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==\",\n    \"EBI\": \"client_name: Ahmed Mohamed Ahmed;bill_reference: 24925422;due_date: 30/01/20222;\",\n    \"NXT\": \"PAY\",\n    \"BTN\": \"سداد\",\n    \"data\": {}\n}"
+								}
+							]
+						},
+						{
+							"name": "السداد",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "AID",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "PWD",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "BIN",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "reqType",
+											"value": "API",
+											"type": "text"
+										},
+										{
+											"key": "srv",
+											"value": "acpt",
+											"type": "text"
+										},
+										{
+											"key": "cmob",
+											"value": "01111010423",
+											"type": "text"
+										},
+										{
+											"key": "do",
+											"value": "PAY",
+											"description": "امر الدفع",
+											"type": "text"
+										},
+										{
+											"key": "CPRID",
+											"value": "ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==",
+											"description": "تحصل عليها من الاستعلام",
+											"type": "text"
+										},
+										{
+											"key": "APIID",
+											"value": "123456",
+											"description": "رقم الفاتورة علي نظامك انت",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "السداد",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "AID",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "PWD",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "BIN",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "reqType",
+													"value": "API",
+													"type": "text"
+												},
+												{
+													"key": "srv",
+													"value": "acpt",
+													"type": "text"
+												},
+												{
+													"key": "cmob",
+													"value": "01111010423",
+													"type": "text"
+												},
+												{
+													"key": "do",
+													"value": "PAY",
+													"description": "امر الدفع",
+													"type": "text"
+												},
+												{
+													"key": "CPRID",
+													"value": "ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==",
+													"description": "تحصل عليها من الاستعلام",
+													"type": "text"
+												},
+												{
+													"key": "APIID",
+													"value": "123456",
+													"description": "رقم الفاتورة علي نظامك انت",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.e-misr.com/ajax.php",
+											"protocol": "https",
+											"host": [
+												"api",
+												"e-misr",
+												"com"
+											],
+											"path": [
+												"ajax.php"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 31 Jan 2022 18:14:07 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json;charset=UTF-8"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+										},
+										{
+											"key": "Report-To",
+											"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=aCe2fcloRqrH3QgSUvq0%2FVgtr9Fg9bpranhr7YqF59oUY20XOS%2FDgjm67N4JZnA2korlz4Vbj7QaM6YqIMyeXFuaXAPM4uzZlzPQcYgiIUMR8F%2B9OxRbIHZaVhkjpPqntg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "NEL",
+											"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "6d64eaf83b2a11b3-BCN"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "alt-svc",
+											"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": \"1400.25\",\n    \"MOB\": \"01111010423\",\n    \"VSA\": \"97\",\n    \"FEE\": \"3\",\n    \"CUT\": \"98\",\n    \"EBI\": \"client_name: Ahmed Mohamed Ahmed;bill_reference: 24925422;due_date: 30/01/20222;\",\n    \"BID\": \"123456\",\n    \"PID\": \"987654321\",\n    \"data\": {}\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "تقسيط المبادره 7125",
+					"item": [
+						{
+							"name": "الاستعلام",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "AID",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "PWD",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "BIN",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "reqType",
+											"value": "API",
+											"type": "text"
+										},
+										{
+											"key": "srv",
+											"value": "f7125",
+											"type": "text"
+										},
+										{
+											"key": "cmob",
+											"value": "01111010423",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "الاستعلام",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "AID",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "PWD",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "BIN",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "reqType",
+													"value": "API",
+													"type": "text"
+												},
+												{
+													"key": "srv",
+													"value": "acpt",
+													"type": "text"
+												},
+												{
+													"key": "cmob",
+													"value": "01111010423",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.e-misr.com/ajax.php",
+											"protocol": "https",
+											"host": [
+												"api",
+												"e-misr",
+												"com"
+											],
+											"path": [
+												"ajax.php"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 31 Jan 2022 18:14:14 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json;charset=UTF-8"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+										},
+										{
+											"key": "Report-To",
+											"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=fIyVfmlR1%2BPyontBLw9%2Bs7AJKZLRcGLiPqa2AVFo%2B1zwVF6QrLM6vdUo5W%2BIib2Woz2xqrcB7GPaEU%2BoY2Ec7DVeFMHNN9Eb4x%2FbmbtajsN3Su42rLUpuhA6pa3WV5fp2A%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "NEL",
+											"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "6d64eb267ef011b3-BCN"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "alt-svc",
+											"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"ST\": \"INF\",\n    \"srv\": \"f333\",\n    \"rVSA\": \"1500.25\",\n    \"MOB\": \"01111010423\",\n    \"VSA\": \"97\",\n    \"FEE\": \"3\",\n    \"CPRID\": \"ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==\",\n    \"EBI\": \"client_name: Ahmed Mohamed Ahmed;bill_reference: 24925422;due_date: 30/01/20222;\",\n    \"NXT\": \"PAY\",\n    \"BTN\": \"سداد\",\n    \"data\": {}\n}"
+								}
+							]
+						},
+						{
+							"name": "السداد",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "AID",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "PWD",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "BIN",
+											"value": "1011",
+											"type": "text"
+										},
+										{
+											"key": "reqType",
+											"value": "API",
+											"type": "text"
+										},
+										{
+											"key": "srv",
+											"value": "f7125",
+											"type": "text"
+										},
+										{
+											"key": "cmob",
+											"value": "01111010423",
+											"type": "text"
+										},
+										{
+											"key": "do",
+											"value": "PAY",
+											"description": "امر الدفع",
+											"type": "text"
+										},
+										{
+											"key": "CPRID",
+											"value": "ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==",
+											"description": "تحصل عليها من الاستعلام",
+											"type": "text"
+										},
+										{
+											"key": "APIID",
+											"value": "123456",
+											"description": "رقم الفاتورة علي نظامك انت",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "السداد",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "AID",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "PWD",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "BIN",
+													"value": "1011",
+													"type": "text"
+												},
+												{
+													"key": "reqType",
+													"value": "API",
+													"type": "text"
+												},
+												{
+													"key": "srv",
+													"value": "acpt",
+													"type": "text"
+												},
+												{
+													"key": "cmob",
+													"value": "01111010423",
+													"type": "text"
+												},
+												{
+													"key": "do",
+													"value": "PAY",
+													"description": "امر الدفع",
+													"type": "text"
+												},
+												{
+													"key": "CPRID",
+													"value": "ajhsgdsadkasdjhasjkdhaskjdasdaskldjhas==",
+													"description": "تحصل عليها من الاستعلام",
+													"type": "text"
+												},
+												{
+													"key": "APIID",
+													"value": "123456",
+													"description": "رقم الفاتورة علي نظامك انت",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.e-misr.com/ajax.php",
+											"protocol": "https",
+											"host": [
+												"api",
+												"e-misr",
+												"com"
+											],
+											"path": [
+												"ajax.php"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 31 Jan 2022 18:14:07 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json;charset=UTF-8"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "CF-Cache-Status",
+											"value": "DYNAMIC"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+										},
+										{
+											"key": "Report-To",
+											"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=aCe2fcloRqrH3QgSUvq0%2FVgtr9Fg9bpranhr7YqF59oUY20XOS%2FDgjm67N4JZnA2korlz4Vbj7QaM6YqIMyeXFuaXAPM4uzZlzPQcYgiIUMR8F%2B9OxRbIHZaVhkjpPqntg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "NEL",
+											"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+										},
+										{
+											"key": "Server",
+											"value": "cloudflare"
+										},
+										{
+											"key": "CF-RAY",
+											"value": "6d64eaf83b2a11b3-BCN"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "alt-svc",
+											"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": \"1400.25\",\n    \"MOB\": \"01111010423\",\n    \"VSA\": \"97\",\n    \"FEE\": \"3\",\n    \"CUT\": \"98\",\n    \"EBI\": \"client_name: Ahmed Mohamed Ahmed;bill_reference: 24925422;due_date: 30/01/20222;\",\n    \"BID\": \"123456\",\n    \"PID\": \"987654321\",\n    \"data\": {}\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "فاليو",
+					"item": [
+						{
+							"name": "اقساط فاليو استعلام",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"c7177\",\r\n    \"cmob\": \"25\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TEST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"c7177\",\r\n    \"cmob\": \"25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "فواتير الكهرباء",
+			"item": [
+				{
+					"name": "الاستعلام",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"elec\",\r\n    \"cmob\": \"01105802120500\",\r\n    \"incq\": \"516\",\r\n    \"Key1\": \"01010211121\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "الاستعلام",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"elec\",\r\n    \"cmob\": \"01105802120500\",\r\n    \"incq\": \"516\",\r\n    \"Key1\": \"01010211121\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 08 Sep 2022 14:20:50 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=fbTNk9YTRjd6e6PZGZxYJ5W4m%2FW7L27GXZJ3B4S0S8tzS5Foqw7ga8VB5c6%2BAAIFAa929ydvlTj1Fo%2BAlojhR3QwLmxsNvuFB2Nz9Qm7t0Dml%2FdISlC%2By8wmz4jAd1rDWw%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "747853a87c034072-LHR"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"INF\",\n    \"SRV\": \"elec\",\n    \"rVSA\": \"0.0700\",\n    \"MOB\": \"01105802120500\",\n    \"VSA\": \"234.00\",\n    \"CUT\": 243.5,\n    \"FEE\": \"9.50\",\n    \"CPRID\": \"MjAyMjA5MDgxNjIwNTAxMDEyZWxlYzg4NzE3NDk=\",\n    \"BTN\": \"سداد\",\n    \"NXT\": \"PAY\",\n    \"data\": [],\n    \"info\": [\n        {\n            \"name\": \"التفاصيل\",\n            \"value\": \"اسم العميل :جمعه احمد مصطفي\\nفاتورة :2022-06\\n القراءة السابقة :9414.00\\n القراءة الحالية :9640.00\\n كمية الاستهلاك : 226.0\\n  باقى المديونية :256.0\"\n        },\n        {\n            \"name\": \"الاستحقاق\",\n            \"value\": \"2022-06-01\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "السداد",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"elec\",\r\n    \"cmob\": \"01105802120500\",\r\n    \"incq\": \"516\",\r\n    \"Key1\": \"01010211121\",\r\n    \"CPRID\": \"MjAyMjA5MDgxNjE1MzkxMDEyZWxlYzg1OTg3ODY=\",\r\n    \"do\":\"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "السداد",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"elec\",\r\n    \"cmob\": \"01105802120500\",\r\n    \"incq\": \"516\",\r\n    \"Key1\": \"01010211121\",\r\n    \"CPRID\": \"MjAyMjA5MDgxNjE1MzkxMDEyZWxlYzg1OTg3ODY=\",\r\n    \"do\":\"PAY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 08 Sep 2022 14:20:13 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=fKU%2Fx2dugZyjjLUF2SiQCIqgZutgmvgtE9LXBZ%2F9cjrRe2mqI293AluJj9Eh2baf9E%2FwH5rycuR%2BPqZgZl7UN2lksxdwcP20zrRfPhORnP1UP%2BD3UCrqqfJJc9bLgRpnLg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "747852d99ddd4072-LHR"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": -243.43,\n    \"BID\": 95865390,\n    \"PID\": 331598384010,\n    \"VSA\": \"234.00\",\n    \"FEE\": 9.5,\n    \"CUT\": 243.5,\n    \"data\": [],\n    \"info\": [\n        {\n            \"name\": \"التفاصيل\",\n            \"value\": \"اسم العميل :جمعه احمد مصطفي\\nفاتورة :2022-06\\n القراءة السابقة :9414.00\\n القراءة الحالية :9640.00\\n كمية الاستهلاك : 226.0\\n  باقى المديونية :256.0\"\n        },\n        {\n            \"name\": \"الاستحقاق\",\n            \"value\": \"2022-06-01\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "شحن الرصيد",
+			"item": [
+				{
+					"name": "شحن رصيد فودافون",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"movo\",\r\n    \"cmob\": \"01010211122\",\r\n    \"avsa\": 10,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "شحن رصيد أورانج",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"moor\",\r\n    \"cmob\": \"01010211121\",\r\n    \"avsa\": 10,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "شحن رصيد اتصالات",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"moet\",\r\n    \"cmob\": \"01010211121\",\r\n    \"avsa\": 10,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "شحن رصيد وي WE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"mowe\",\r\n    \"cmob\": \"01010211121\",\r\n    \"avsa\": 10,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "كروت الشحن",
+			"item": [
+				{
+					"name": "كروت شحن فودافون",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"crvo\",\r\n    \"cmob\": \"10\",\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "كروت شحن فودافون",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"crvo\",\r\n    \"cmob\": \"10\",\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:24:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=lVBFoYUZVpwDoF2ufPMQDScLcSkN%2F1FwvracscJsnBM0cZBeGSXTdSePsQLL7hhY6veQNWTF7X4CW8X1y4OplqRwfssiV5z3jEhuS%2FPE0FrWJkfOBHELBcxn%2BWhP3VzQqA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745de9db5bfdd3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"YES\",\n    \"SRV\": \"crvo\",\n    \"rVSA\": -7.334999999999999,\n    \"MOB\": \"10\",\n    \"VSA\": \"10.000\",\n    \"CUT\": 9.87,\n    \"SN\": 882129898,\n    \"CDE\": \"87184047758331493\",\n    \"BID\": \"666666\",\n    \"PNT\": \"YES\",\n    \"NXT\": \"PAY\",\n    \"BTN\": \"كرت جديد\",\n    \"data\": {\n        \"الحالة\": \"عملية ناجحة<input type=\\\"hidden\\\" name=\\\"pinC\\\" value=\\\"1012\\\" />\",\n        \"الخدمة\": \"فودافون - 10ج\",\n        \"الكود\": 87184047758331493,\n        \"السريل\": 882129898,\n        \"القيمة\": \"10.000\",\n        \"الرصيد\": 7\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "كروت شحن اورانج",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"cror\",\r\n    \"cmob\": \"10\",\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "كروت شحن اتصالات",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"cret\",\r\n    \"cmob\": \"10\",\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "شحن رصيد وي WE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"crwe\",\r\n    \"cmob\": \"25\",\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "شحن الفكة طاير",
+			"item": [
+				{
+					"name": "شحن فودافون فكة علي الطائر",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"movo2\",\r\n    \"cmob\": \"01010211121\",\r\n    \"TYP\": 3025,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "شحن اورانج احسن ناس",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"moor\",\r\n    \"cmob\": \"01010211121\",\r\n    \"TYP\": 1025,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "شحن اتصالات اقوي شحنة",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"moet\",\r\n    \"cmob\": \"01010211121\",\r\n    \"TYP\": 1025,\r\n    \"APIID\": \"123456\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "الانترنت المنزلي",
+			"item": [
+				{
+					"name": "انترنت WE (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dswe\",\r\n    \"cmob\": \"0483470760\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت WE (استعلام)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dswe\",\r\n    \"cmob\": \"0483470760\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:18:40 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=7tVAzbG7krAse7KrBFBqGhCVpc4vl8J8jpYJqaXLHO%2F7iPARDqiL%2FfebXgWCpq2lCcxxckl1ahHTuBnvq2f43jMdHfL2oIIP%2BqX5ouVWaeGTU3ouee8P0%2FYhs0vK2iTeZA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745de0f73b7fd3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"INF\",\n    \"SRV\": \"dswe\",\n    \"rVSA\": \"2.5350\",\n    \"BTN\": \"استعلام\",\n    \"MOB\": \"048-3470760\",\n    \"VSA\": \"136.80\",\n    \"FEE\": 4.5,\n    \"CUT\": 137.05,\n    \"NXT\": \"QRY\",\n    \"data\": {\n        \"الخدمة\": \"انترنت منزلي WE\",\n        \"الاسم\": \"صبري سلامة اسماعيل حسانين\",\n        \"رقم الارضي\": \"048-3470760\",\n        \"المبلغ\": \"136.80\"\n    },\n    \"OFR\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "انترنت WE (سداد)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dswe\",\r\n    \"cmob\": \"0483470760\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت WE (سداد)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dswe\",\r\n    \"cmob\": \"0483470760\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:30:28 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=TM1kn5WjZA4iK2Kd%2Fsc03y%2BYt1wrl%2F%2Fxot5cHweesNuDx9ZyU1MvKPxOvf%2F5HpxuKojWbhEmHCW0IGaF%2BwpuV9oEKXdrNXK9fOa12lksMUFaesSUWtoMX%2BQTAqIvf90%2Fuw%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745df2485eefd3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": -47.715,\n    \"BID\": 95383086,\n    \"PID\": 95383086,\n    \"VSA\": 50,\n    \"FEE\": 4,\n    \"CUT\": 50.25,\n    \"data\": {\n        \"الحالة\": \"عملية ناجحة\",\n        \"الخدمة\": \"انترنت منزلي WE\",\n        \"الاسم\": \"NA\",\n        \"الرقم\": \"048-3470760\",\n        \"القيمة\": 50,\n        \"المدفوع\": 54\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "انترنت اورانج (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dsor\",\r\n    \"cmob\": \"0223675625\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت اورانج (استعلام)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dsor\",\r\n    \"cmob\": \"0223675625\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:23:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=x%2FMrICRPHVOWpnEZFUjRbnAaMhXgiH%2B7g74pwiFxe4a0%2FYFFQXQVIg4h7JvJtBs7U6iIyDK2t2ooe7WSttIo8MWs4ALyE9itt2VD1RB92O6dxoQ%2FyziH1r7RjIvs8NtkSg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745de75619b0d3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"INF\",\n    \"SRV\": \"dsor\",\n    \"MOB\": \"0223675625\",\n    \"rVSA\": \"2.5350\",\n    \"VSA\": \"219.16\",\n    \"CUT\": 215.6,\n    \"BTN\": \"سداد الفاتورة\",\n    \"NXT\": \"PAY\",\n    \"data\": {\n        \"الخدمة\": \"اورانج DSL\",\n        \"الرقم\": \"0223675625\",\n        \"الاسم\": null,\n        \"تفاصيل\": null,\n        \"القيمة\": 220,\n        \"الرسوم\": 1,\n        \"الإجمالي\": \"<b>220</b> ج\",\n        \"المخصوم\": 215.6\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "انترنت اورانج (سداد)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dsor\",\r\n    \"cmob\": \"0223675625\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت اورانج (سداد)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dsor\",\r\n    \"cmob\": \"0223675625\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:29:45 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=I7eC5BBkqw8I7z0vX50lE4IjrixD5SAt2%2BQ%2FIVxbtEVLKjkGjztdhc3pDp4ISZPY0sJskpF%2FCZs5w7X2bjNToLGp8tOfNN16CHpQQVskkmBcSA0iqwWgUtWH3WqkETEWDA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745df1377df7d3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": -46.465,\n    \"BID\": 95382959,\n    \"PID\": 95382959,\n    \"VSA\": 50,\n    \"FEE\": 0,\n    \"CUT\": 49,\n    \"data\": {\n        \"الحالة\": \"عملية ناجحة\",\n        \"الخدمة\": \"اورانج DSL\",\n        \"الاسم\": \"\",\n        \"الرقم\": \"0223675625\",\n        \"القيمة\": 50,\n        \"المدفوع\": 50\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "انترنت اتصالات (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dset\",\r\n    \"cmob\": \"0224958502\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت اتصالات (استعلام)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dset\",\r\n    \"cmob\": \"0224958502\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:24:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=t4VuXyKG3dSQYqYo%2Fdo3ok0G5KuaKVsHmWmMKsZSn%2BSc572jJYJ4FiBMxDNAkZ7hRCr1AHL98QCdbHLEfWhGkl1G56gYX%2FqaXb7XCYCorW0Ro9tfvkjQypO%2BHfMMa8aSZw%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745de9321ebdd3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"INF\",\n    \"SRV\": \"dset\",\n    \"MOB\": \"0224958502\",\n    \"rVSA\": \"2.5350\",\n    \"VSA\": \"148.20\",\n    \"CUT\": 147.7,\n    \"BTN\": \"سداد الفاتورة\",\n    \"NXT\": \"PAY\",\n    \"data\": {\n        \"الخدمة\": \"اتصالات DSL\",\n        \"الرقم\": \"0224958502\",\n        \"الاسم\": null,\n        \"القيمة\": \"148.20\",\n        \"الرسوم\": 2,\n        \"الإجمالي\": \"<b>150.2</b> ج\",\n        \"المخصوم\": 147.7\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "انترنت اتصالات (سداد)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dset\",\r\n    \"cmob\": \"0224958502\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت اتصالات (سداد)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dset\",\r\n    \"cmob\": \"0224958502\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:28:14 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=eVd%2B%2BJMKvVlOm30CaWTL6y5IHePAGBDQZD8PNcxsSB55g6OIWnOgzpESAVDkRIw3JyVaHx74P3N6zGapz4393fDEJLh6nUeMcW8bqPwlA1KgCHUEWqG1Fas7684AGPOIHw%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745deefe7c70d3cc-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": -46.965,\n    \"BID\": 95382646,\n    \"PID\": 95382646,\n    \"VSA\": 50,\n    \"FEE\": 2,\n    \"CUT\": 49.5,\n    \"data\": {\n        \"الحالة\": \"عملية ناجحة\",\n        \"الخدمة\": \"اتصالات DSL\",\n        \"الاسم\": \"\",\n        \"الرقم\": \"0224958502\",\n        \"القيمة\": 50,\n        \"المدفوع\": 52\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "انترنت فودافون (سداد)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dsvo\",\r\n    \"cmob\": \"0473410080\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "انترنت فودافون (سداد)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"dsvo\",\r\n    \"cmob\": \"0473410080\",\r\n    \"avsa\": 50,\r\n    \"APIID\": \"1234567890\",\r\n    \"do\": \"PAY\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.e-misr.com/ajax.php",
+									"protocol": "https",
+									"host": [
+										"api",
+										"e-misr",
+										"com"
+									],
+									"path": [
+										"ajax.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 05 Sep 2022 09:42:33 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=RqTmqCYFv2ahiVqapGEZymwUh8k10Va0pdJXjHEddyy2%2FYrf%2FNg8zMizAQ6X19QevbZ0hHQVpNsWB2wtYr%2Fd8deNRxhrgx3v6d70j60tmGQQQy6KfBSlBTmDN%2BjfBP4iXQ%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "745e03f92cf5d333-CDG"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ST\": \"YES\",\n    \"rVSA\": -45.465,\n    \"BID\": 95384923,\n    \"PID\": 95384923,\n    \"VSA\": 50,\n    \"FEE\": 0,\n    \"CUT\": 48,\n    \"data\": {\n        \"الحالة\": \"عملية ناجحة\",\n        \"الخدمة\": \"فودافون DSL\",\n        \"الاسم\": \"\",\n        \"الرقم\": \"0473410080\",\n        \"القيمة\": 50,\n        \"المدفوع\": 50\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "فواتير الموبيل",
+			"item": [
+				{
+					"name": "موبيل المصرية (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"biwe\",\r\n    \"cmob\": \"01555421160\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "موبيل المصرية (سداد)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"biwe\",\r\n    \"cmob\": \"01555421160\",\r\n    \"APIID\":\"your-TrID-0001\",\r\n    \"avsa\":15,\r\n    \"do\":\"PAY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "التعليم",
+			"item": [
+				{
+					"name": "جامعة طنطا (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"edu12\",\r\n    \"cmob\": \"30409301618638\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "جامعة بنها (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"edu3\",\r\n    \"incq\": 650,\r\n    \"cmob\": \"2101120220102414\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "تجديد الباقة",
+			"item": [
+				{
+					"name": "تجديد باقة فودافون (استعلام)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"movo4\",\r\n    \"cmob\": \"01014520308\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "خدمات المرور",
+			"item": [
+				{
+					"name": "استعلام المرور",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"AID\": 1012,\r\n    \"PWD\": \"1012\",\r\n    \"BIN\": \"1012\",\r\n    \"srv\": \"f788\",\r\n    \"cmob\": \"9205151763\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.e-misr.com/ajax.php",
+							"protocol": "https",
+							"host": [
+								"api",
+								"e-misr",
+								"com"
+							],
+							"path": [
+								"ajax.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,329 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+ <!-- Latest compiled and minified CSS -->
+ 
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/bootstrap.min.css"/>
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/animate.css"/>
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/fon-family_Open_Sans.css"/>
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/fon-family_Roboto.css"/>
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/style.css"/>
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/TimeCircles.css"/>
+<link rel="stylesheet" href="http://localhost:8080/Magento/connectpaycss/timer.css"/>
+<!-- jQuery library -->
+<script src="http://localhost:8080/Magento/connectpayjs/jquery-3.3.1.js"></script>
+<script src="http://localhost:8080/Magento/connectpayjs/bootstrap.min.js"></script>
+<script src="http://localhost:8080/Magento/connectpayjs/TimeCircles.js"></script>
+
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+    </div>
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')},
+                        css: {disabled: !isPlaceOrderActionAllowed()},
+                        enable: (getCode() == isChecked())
+                        "
+                        disabled>
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+ <style>
+        h1, h2, h3, h4, h5 {
+            font-family: "Titillium Web", sans-serif;
+        }
+
+        h2 {
+            color: #f6931e;
+            font-weight: 500;
+            margin: 0.5em 0;
+            padding: 0;
+            font-size: 22px;
+        }
+
+        h3 {
+            font-size: 15px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #f6931e !important;
+        }
+    </style>
+
+
+<div class="row">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-t">
+                                        <input data-toggle="modal" type="button" id="place_order" class="btn btn-primary" value="Pay Using ConnectPay">
+<div class="modal fade" id="orderSummaryModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal-dialog">
+"<div class="modal-content popup-bg">
+<div class="modal-header p-xs">
+                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+<!--<img src="images/BankLogo.jpg" width="200" alt=""></div>-->
+<!-- content goes here -->
+<div class="row">
+<div class="p-sm">
+<div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
+<div class="panel border-dashed text-center p-md" style="
+    border: 2px dashed #f6931e;
+    border-radius: 10px;
+    background-color: #F1F1F1;">
+<h2 class="text-gray font-size-22"><b>ConnectPay ID</b></h2>
+<h2 class="font-size-26" id="pConsumerNumber"><b></b></h2>
+</div>
+</div>
+<div class="col-lg-4 col-md-4 col-xs-12 col-sm-12 text-center">
+<h4 id="h4message">Session expires in:</h4>
+<div class="col-lg-offset-2 col-xs-offset-3 col-lg-10 col-md-10 col-xs-12 col-sm-12">
+<div class="stopwatch" id="demo" data-timer="180" style="width: 120px; height: 120px;"></div>
+</div>
+<div class="orderMessage">
+<h3 id="h2Message"></h3>
+</div>
+</div>
+<div class="spacer"></div>
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 order_summ">
+<fieldset>
+                                                                    <legend class="modal-title orange-text" id="lineModalLabel"> ORDER SUMMARY</legend>
+<div class="spacer"></div>
+<div class="col-lg-3 col-md-3 col-xs-12 col-sm-12 nopadding-5">
+<h3>Merchant Name</h3>
+</div>
+<div class="col-lg-3 col-md-3 col-xs-12 col-sm-12 nopadding-5">
+
+Bareeze Man
+
+</div>
+<div class="col-lg-3 col-md-3 col-xs-12 col-sm-12 nopadding-5">
+<h3>Customer Name</h3>
+</div>
+<div id="pCustomerName" class="col-lg-3 col-md-3 col-xs-12 col-sm-12 nopadding-5"><b>
+  
+    </b></div>
+<div class="clearfix"></div>
+<div class="col-lg-3 col-md-3 col-xs-12 col-sm-12 nopadding-5">
+<h3>Description</h3>
+</div>
+<div class="col-lg-9 col-md-9 col-xs-12 col-sm-12 nopadding-5">
+
+Items purchased
+
+</div>
+<div class="clearfix"></div>
+<div class="col-lg-3 col-md-3 col-xs-12 col-sm-12 m-t-sm nopadding-5">
+<h3>Order Amount</h3>
+</div>
+<div class="col-lg-6 col-md-6 col-xs-12 col-sm-12 nopadding-5">
+<h2 id="pOrderAmount"><sup>PKR.</sup> <b><?php if(isset(jQueryorderamount)){echo jQueryorderamount;}?></b></h2>
+</div>
+<div class="clearfix"></div>
+<div class="col-lg-6 col-md-6 col-xs-12 col-sm-12 nopadding-5">
+<h3>View Your Cart Here</h3>
+</div>
+<div class="clearfix"></div>
+<div class="table_scroll">
+<table class="table table-hover table-fixed">
+<thead>
+<tr>
+<th class="col-xs-3">S No.</th>
+<th class="col-xs-3">Description</th>
+<th class="col-xs-6">Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="col-xs-3">01.</td>
+<td class="col-xs-3">Clothes</td>
+<td class="col-xs-6"><sup>PKR</sup> 2533.00</td>
+</tr>
+<tr>
+<td class="col-xs-3">02.</td>
+<td class="col-xs-3">Shoes</td>
+<td class="col-xs-6"><sup>PKR</sup> 1508.00</td>
+</tr>
+<tr>
+<td class="col-xs-3">03.</td>
+<td class="col-xs-3">Electronics</td>
+<td class="col-xs-6"><sup>PKR</sup> 2698.00</td>
+</tr>
+<tr>
+<td class="col-xs-3">04.</td>
+<td class="col-xs-3">Jewellery</td>
+<td class="col-xs-6"><sup>PKR</sup> 4325.00</td>
+</tr>
+<tr>
+<td class="col-xs-3">05.</td>
+<td class="col-xs-3">Grocery</td>
+<td class="col-xs-6"><sup>PKR</sup> 1984.00</td>
+</tr>
+<tr>
+<td class="col-xs-3">06.</td>
+<td class="col-xs-3">Mobiles</td>
+<td class="col-xs-6"><sup>PKR</sup> 1765.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="spacer"></div></fieldset>
+</div>
+<div class="clearfix"></div>
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 p-sm">
+<fieldset>
+                                                                    <legend class="orange-text">HOW TO PAY</legend>
+<div class="howtopay">
+<ul>
+    <li> 1 - Log in to your internet banking portal <a href="https://connectpay.com.pk/#partnersbank" target="_blank" rel="noopener noreferrer"> (How to?) </a></li>
+    <li> 2 - Select ConnectPay from Bill Payment Menu</li>
+    <li> 3 - Enter Consumer Id</li>
+    <li> 4 - Confirm details and pay</li>
+</ul>
+</div></fieldset>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    
+        $(document).ready(function(){
+            debugger;
+            alert('Hello');
+            var idle_timer = $(".stopwatch", window.parent.document);
+           idle_timer = $(".stopwatch").TimeCircles(
+        {
+            time: { Days: { show: false }, Hours: { show: false }, Minutes: { show: false }, Seconds: { color: "#f6931e" } },
+            use_background: true,
+            total_duration: 180,
+            circle_bg_color: "#C0C8CF",
+            start: false
+        }).addListener(
+        function (unit, value, total) {
+            if (value == 30) {
+                //idle_timer.data('timer', 15);
+                $('.stopwatch').TimeCircles({
+                    time: {
+                        Days: { show: false },
+                        Hours: { show: false },
+                        Minutes: { show: false },
+                        Seconds: { color: '#FF0000' }
+                    }
+                });
+            }
+        }
+    );
+            function setElementsOnTimeOut() {
+
+
+                setTimeout(function () { $("#demo").hide() }, 180000);
+                setTimeout(function () { $("#h2Message").show() }, 180000);
+                setTimeout(function () { $("#h4message")[0].innerText = "" }, 180000);
+                setTimeout(function () { idle_timer.stop(); }, 180000);
+                setTimeout(function () { idle_timer.destroy(); }, 180000);
+                
+            }
+              function setTimer() {
+                $("#demo").show();
+                idle_timer.start();
+              }
+            
+            function doAjaxRequest(type, url, parameterData, datatype, async) {
+            var result = "";
+            $.ajax({
+                type: type,
+                url: url,
+                data: parameterData,
+                contentType: "application/json;",
+                async: async,
+                datatype: datatype,
+                success: function (data) {
+                    result = data;
+                },
+                failure: function (data) {
+                    result = data;
+                }
+            });
+            return result;
+            }
+            function blockOrder(connectPayId) {
+                debugger;
+                var result = doAjaxRequest("POST", "https://connectpay.com.pk:555/Home/BlockOrder", JSON.stringify({ ConnectPayId: connectPayId }), "json", false);
+            }
+
+            $("#place_order").click(function(e){
+                var FirstName = "Shayan";
+                var LastName ="khurshid"; 
+                var OrderAmount = "5000"; 
+                //var mobile = $("#mobile").val(); 
+                //var email = $("#emailaddress").val(); 
+                $.ajax({
+                        type: "POST",
+                        url:"https://connectpay.com.pk:555/cpay/co?oJson={OrderNumber:Woocommerce"+Math.random()+",MerchantId:bareezeman,MerchantPassword:p@ssw0rd,OrderAmount:123,OrderAmountPaid:12,OrderAmountRemaining:123,OrderDueDate:12/02/2018,OrderAmountWithinDueDate:123,OrderAmountAfterDueDate:123,OrderTypeId:Service,OrderType:Service,IssueDate:12/02/2018,DatePaid:,Reserved:,TransactionStatus:UNPAID,ReasonType:,Reason:,CustomerName:Usman,CustomerMobile:03333473872,CustomerEmail:mohammad.saleem@thksolutions.com,CustomerAddress:,CustomerBank:,Field_01:,Field_02:,Field_03:,Field_04:,Field_05:,Field_06:,Field_07:,Field_08:}",
+                        dataType:"json",
+                        
+                        cache: false,
+                        success: function(result){
+                            var connectPayId1 = result[0].ConnectPayId.substring(0, 4);
+                            var connectPayId2 = result[0].ConnectPayId.substring(4, 8);
+                            var connectPayId3 = result[0].ConnectPayId.substring(8, 12);
+                            var connectPayId4 = result[0].ConnectPayId.substring(12, 16);
+
+                            var connectPayId = connectPayId1 + " " + connectPayId2 + " " + connectPayId3 + " " + connectPayId4;
+
+                            $("#pCustomerName").text(FirstName+ " "+ LastName);
+                            $("#pConsumerNumber").find("b").text(connectPayId);
+                            //var orderAmountS = orderAmount.toLocaleString(orderAmount);
+                            $("#pOrderAmount").find("b").text(OrderAmount);
+                            $("#orderSummaryModal").modal("show");
+                            $("#firstname").val("");
+                            $("#lastname").val("");
+                            $("#mobile").val("");
+                            $("#emailaddress").val("");
+                            setTimer();
+                            setTimeout(function () { blockOrder(result[0].ConnectPayId) }, 180000);
+                            setElementsOnTimeOut();
+                        }
+                     
+                });
+            
+            });
+            
+        });
+
+
+</script>

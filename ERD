@@ -1,0 +1,1077 @@
+تمام — ده ERD كامل ومناسب جدًا لنظام Doctor Pay عندك، ومبني على إن عندك:
+
+قائمة خدمات كبيرة ومتفرعة زي شحن الموبايل، الفواتير، المحافظ، التعليم، المرافق، الأقساط، خدمات التاجر… كما ظهر في ملف قائمة الخدمات. 
+
+تدفق استعلام ثم دفع مع الاعتماد على APIID وCPRID وإعادة المحاولة بنفس رقم العملية في نفس اليوم، كما ظهر في ملف Cash Collection وملف سداد الخدمات.
+
+خيارات الحساب مثل استعلام الرصيد وفحص الفاتورة، كما ظهر في ملف خيارات الحساب. 
+
+
+
+---
+
+ERD كامل للنظام
+
+1) الكيانات الأساسية
+
+1. Users
+
+يمثل كل الحسابات داخل النظام: أدمن، وكيل، تاجر، عميل.
+
+الحقول:
+
+id PK
+
+full_name
+
+username_phone UNIQUE
+
+password_hash
+
+secondary_phone
+
+national_id UNIQUE
+
+birth_date
+
+governorate
+
+address_detail
+
+business_name
+
+role ENUM('admin','agent','merchant','customer')
+
+status ENUM('pending','approved','rejected','blocked')
+
+is_phone_verified
+
+is_kyc_verified
+
+created_at
+
+updated_at
+
+last_login_at
+
+
+
+---
+
+2. User_KYC
+
+بيانات التحقق من الهوية.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+national_id_front_image
+
+national_id_back_image
+
+selfie_image
+
+review_status ENUM('pending','approved','rejected')
+
+reviewed_by FK -> Users.id
+
+review_notes
+
+reviewed_at
+
+created_at
+
+
+
+---
+
+3. User_Approvals
+
+حالة موافقة الأدمن على الحساب.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+requested_by
+
+approved_by FK -> Users.id
+
+approval_status ENUM('pending','approved','rejected')
+
+reason
+
+created_at
+
+updated_at
+
+
+
+---
+
+4. Agent_Profiles
+
+بيانات الوكلاء.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+agent_code
+
+commission_rate
+
+max_merchants
+
+status
+
+created_at
+
+updated_at
+
+
+
+---
+
+5. Merchant_Profiles
+
+بيانات التجار.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+merchant_code
+
+agent_id FK -> Agent_Profiles.id
+
+merchant_type
+
+status
+
+created_at
+
+updated_at
+
+
+
+---
+
+6. Agent_Merchant_Assignments
+
+ربط الوكيل بالتجار التابعين له.
+
+الحقول:
+
+id PK
+
+agent_id FK -> Agent_Profiles.id
+
+merchant_id FK -> Merchant_Profiles.id
+
+assigned_by FK -> Users.id
+
+assignment_status ENUM('active','inactive')
+
+created_at
+
+
+
+---
+
+2) الأمان والجهاز والموقع
+
+7. Devices
+
+كل جهاز يدخل عليه المستخدم.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+device_uid UNIQUE
+
+device_name
+
+device_brand
+
+device_model
+
+os_name
+
+os_version
+
+app_version
+
+ip_address
+
+device_fingerprint_hash
+
+is_trusted
+
+status ENUM('active','blocked','pending_verification')
+
+first_seen_at
+
+last_seen_at
+
+created_at
+
+updated_at
+
+
+
+---
+
+8. Device_Permissions
+
+صلاحيات الجهاز المطلوبة.
+
+الحقول:
+
+id PK
+
+device_id FK -> Devices.id
+
+location_permission
+
+bluetooth_permission
+
+contacts_permission
+
+sms_permission
+
+notification_permission
+
+camera_permission
+
+microphone_permission
+
+last_checked_at
+
+
+
+---
+
+9. Device_Locations
+
+تخزين كل موقع جغرافي.
+
+الحقول:
+
+id PK
+
+device_id FK -> Devices.id
+
+user_id FK -> Users.id
+
+latitude
+
+longitude
+
+accuracy_meters
+
+altitude
+
+location_source ENUM('gps','network','fused')
+
+geohash
+
+city
+
+country
+
+created_at
+
+
+
+---
+
+10. Device_Contacts
+
+قائمة جهات الاتصال بعد الموافقة.
+
+الحقول:
+
+id PK
+
+device_id FK -> Devices.id
+
+user_id FK -> Users.id
+
+contact_name
+
+contact_phone
+
+contact_hash
+
+synced_at
+
+
+> الأفضل تخزين نسخة مشفرة أو hash حسب سياسة الخصوصية.
+
+
+
+
+---
+
+11. Device_Bluetooth_Devices
+
+الأجهزة المجاورة أو المقترنة عبر البلوتوث.
+
+الحقول:
+
+id PK
+
+device_id FK -> Devices.id
+
+user_id FK -> Users.id
+
+bluetooth_name
+
+bluetooth_mac_hash
+
+signal_strength
+
+seen_at
+
+
+
+---
+
+12. Login_Sessions
+
+جلسات الدخول، ويدخل فيها "ذكرني".
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+device_id FK -> Devices.id
+
+refresh_token_hash
+
+remember_me
+
+login_ip
+
+login_location_id FK -> Device_Locations.id
+
+expires_at
+
+revoked_at
+
+created_at
+
+
+
+---
+
+13. OTP_Challenges
+
+التحقق عند جهاز جديد أو تسجيل دخول جديد.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+device_id FK -> Devices.id
+
+channel ENUM('whatsapp','sms')
+
+otp_hash
+
+purpose ENUM('register','login','new_device','reset_password')
+
+attempt_count
+
+status ENUM('pending','verified','expired','failed')
+
+expires_at
+
+verified_at
+
+created_at
+
+
+
+---
+
+3) الخدمات والتصنيفات
+
+14. Service_Categories
+
+تصنيفات الخدمات.
+
+الحقول:
+
+id PK
+
+name
+
+icon
+
+sort_order
+
+is_active
+
+
+
+---
+
+15. Services
+
+الخدمات نفسها.
+
+الحقول:
+
+id PK
+category_id FK -> Service_Categories.id
+
+service_code UNIQUE
+
+name
+
+description
+
+provider_name
+
+request_type ENUM('inquiry_payment','payment_only','balance_only','bill_check')
+
+is_active
+
+created_at
+
+updated_at
+
+
+
+---
+
+16. Service_Fields
+
+الحقول الديناميكية لكل خدمة.
+
+الحقول:
+
+id PK
+
+service_id FK -> Services.id
+
+field_name
+
+field_label
+
+field_type ENUM('text','number','tel','date','select','image')
+
+is_required
+
+sort_order
+
+validation_rule
+
+default_value
+
+
+
+---
+
+17. Service_Field_Options
+
+خيارات الحقول من نوع select.
+
+الحقول:
+
+id PK
+
+service_field_id FK -> Service_Fields.id
+
+option_label
+
+option_value
+
+sort_order
+
+is_active
+
+
+
+---
+
+4) العمليات المالية
+
+18. Inquiries
+
+سجل الاستعلام قبل الدفع.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+merchant_id FK -> Merchant_Profiles.id
+
+device_id FK -> Devices.id
+
+service_id FK -> Services.id
+
+external_cprid
+
+request_payload
+
+response_payload
+
+customer_reference
+
+bill_number
+
+amount_before_fee
+
+fee_amount
+
+net_amount
+
+status ENUM('pending','success','failed','expired')
+
+created_at
+
+updated_at
+
+
+
+---
+
+19. Transactions
+
+العملية المالية النهائية.
+
+الحقول:
+
+id PK
+
+inquiry_id FK -> Inquiries.id
+
+api_transaction_id UNIQUE  ← ده APIID
+
+provider_transaction_id
+
+transaction_type ENUM('payment','refund','reversal','wallet_topup')
+
+amount
+
+fee_amount
+
+total_amount
+
+status ENUM('pending','success','failed','reversed','unknown')
+
+provider_response_code
+
+provider_response_message
+
+request_payload
+
+response_payload
+
+retry_count
+
+created_at
+
+updated_at
+
+
+
+---
+
+20. Transaction_Status_History
+
+تاريخ تغييرات حالة المعاملة.
+
+الحقول:
+
+id PK
+
+transaction_id FK -> Transactions.id
+
+old_status
+
+new_status
+
+changed_by FK -> Users.id
+
+notes
+
+created_at
+
+
+
+---
+
+21. Invoices
+
+الفواتير المطبوعة أو المرسلة.
+
+الحقول:
+
+id PK
+
+transaction_id FK -> Transactions.id
+
+invoice_number UNIQUE
+
+merchant_name_snapshot
+
+customer_name_snapshot
+
+service_name_snapshot
+
+amount_snapshot
+
+fee_snapshot
+
+total_snapshot
+
+invoice_pdf_url
+
+created_at
+
+
+
+---
+
+5) المحافظ والحركة المالية الداخلية
+
+22. Wallets
+
+محفظة كل مستخدم.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+balance
+
+currency
+
+status
+
+created_at
+
+updated_at
+
+
+
+---
+
+23. Wallet_Ledger
+
+حركات المحفظة بالتفصيل.
+
+الحقول:
+
+id PK
+
+wallet_id FK -> Wallets.id
+
+transaction_id FK -> Transactions.id NULL
+
+entry_type ENUM('credit','debit','hold','release')
+
+amount
+
+balance_before
+
+balance_after
+
+description
+
+created_at
+
+
+
+---
+
+24. Wallet_Transfers
+
+تحويلات بين الحسابات.
+
+الحقول:
+
+id PK
+
+from_wallet_id FK -> Wallets.id
+
+to_wallet_id FK -> Wallets.id
+
+amount
+
+status
+
+reference_no
+
+created_at
+
+
+
+---
+
+6) الإشعارات والتواصل
+
+25. Notifications
+
+الإشعارات داخل النظام.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+device_id FK -> Devices.id NULL
+
+type ENUM('otp','approval','payment','alert','system')
+
+title
+
+message
+
+channel ENUM('app','sms','whatsapp','email')
+
+read_at
+
+created_at
+
+
+
+---
+
+26. Notification_Templates
+
+قوالب الرسائل.
+
+الحقول:
+
+id PK
+
+template_key
+
+channel
+
+title_template
+
+body_template
+
+is_active
+
+created_at
+
+
+
+---
+
+7) الإدارة والمراجعة
+
+27. Audit_Logs
+
+سجل كل شيء.
+
+الحقول:
+
+id PK
+
+actor_user_id FK -> Users.id
+
+device_id FK -> Devices.id NULL
+
+action
+
+entity_name
+
+entity_id
+
+old_value
+
+new_value
+
+ip_address
+
+created_at
+
+
+
+---
+
+28. Security_Events
+
+أحداث الأمان.
+
+الحقول:
+
+id PK
+
+user_id FK -> Users.id
+
+device_id FK -> Devices.id NULL
+
+event_type ENUM('new_device','otp_failed','geo_mismatch','permission_denied','blocked')
+
+severity ENUM('low','medium','high','critical')
+
+details
+
+created_at
+
+
+
+---
+
+29. System_Settings
+
+إعدادات النظام.
+
+الحقول:
+
+id PK
+
+setting_key
+
+setting_value
+
+updated_by FK -> Users.id
+
+updated_at
+
+
+
+---
+
+العلاقات الأساسية
+
+Users 1:N Devices
+
+Users 1:N OTP_Challenges
+
+Users 1:N Login_Sessions
+
+Users 1:N Inquiries
+
+Users 1:N Transactions
+
+Users 1:1 Wallets
+
+Users 1:N KYC
+
+Users 1:N Audit_Logs
+
+Users 1:N Security_Events
+
+Devices 1:N Device_Locations
+
+Devices 1:1 Device_Permissions
+
+Devices 1:N Device_Contacts
+
+Devices 1:N Device_Bluetooth_Devices
+
+Devices 1:N OTP_Challenges
+
+Devices 1:N Login_Sessions
+
+Service_Categories 1:N Services
+
+Services 1:N Service_Fields
+Service_Fields 1:N Service_Field_Options
+
+Inquiries 1:1 Transactions أو 1:N لو هتدعم أكثر من محاولة
+
+Transactions 1:1 Invoices
+
+Transactions 1:N Transaction_Status_History
+
+Wallets 1:N Wallet_Ledger
+
+Agent_Profiles 1:N Merchant_Profiles
+
+Agent_Profiles 1:N Agent_Merchant_Assignments
+
+Merchant_Profiles 1:N Agent_Merchant_Assignments
+
+Merchant_Profiles 1:N Inquiries
+
+Merchant_Profiles 1:N Transactions
+
+
+
+---
+
+Mermaid ERD جاهز للرسم
+
+erDiagram
+    USERS ||--o{ DEVICES : owns
+    USERS ||--o{ OTP_CHALLENGES : receives
+    USERS ||--o{ LOGIN_SESSIONS : opens
+    USERS ||--o{ INQUIRIES : creates
+    USERS ||--o{ TRANSACTIONS : makes
+    USERS -- WALLETS : has
+    USERS ||--o{ USER_KYC : submits
+    USERS ||--o{ AUDIT_LOGS : performs
+    USERS ||--o{ SECURITY_EVENTS : triggers
+
+    USERS ||--o| AGENT_PROFILES : is
+    USERS ||--o| MERCHANT_PROFILES : is
+
+    AGENT_PROFILES ||--o{ MERCHANT_PROFILES : manages
+    AGENT_PROFILES ||--o{ AGENT_MERCHANT_ASSIGNMENTS : assigns
+    MERCHANT_PROFILES ||--o{ AGENT_MERCHANT_ASSIGNMENTS : assigned_to
+
+    DEVICES -- DEVICE_PERMISSIONS : has
+    DEVICES ||--o{ DEVICE_LOCATIONS : logs
+    DEVICES ||--o{ DEVICE_CONTACTS : syncs
+    DEVICES ||--o{ DEVICE_BLUETOOTH_DEVICES : detects
+    DEVICES ||--o{ OTP_CHALLENGES : verified_by
+    DEVICES ||--o{ LOGIN_SESSIONS : used_in
+
+    SERVICE_CATEGORIES ||--o{ SERVICES : contains
+    SERVICES ||--o{ SERVICE_FIELDS : defines
+    SERVICE_FIELDS ||--o{ SERVICE_FIELD_OPTIONS : offers
+
+    MERCHANT_PROFILES ||--o{ INQUIRIES : uses
+    MERCHANT_PROFILES ||--o{ TRANSACTIONS : posts
+    SERVICES ||--o{ INQUIRIES : queried
+    INQUIRIES -- TRANSACTIONS : leads_to
+    TRANSACTIONS -- INVOICES : generates
+    TRANSACTIONS ||--o{ TRANSACTION_STATUS_HISTORY : tracks
+
+    WALLETS ||--o{ WALLET_LEDGER : records
+    WALLETS ||--o{ WALLET_TRANSFERS : source_or_target
+
+
+---
+
+قواعد مهمة جدًا في التصميم
+
+1) الحساب لا يكتمل إلا بعد الموافقة
+
+Users.status = pending
+
+لا يسمح بالدخول الكامل إلا بعد:
+
+مراجعة الأدمن
+
+اكتمال KYC
+
+تأكيد الهاتف
+
+تسجيل أول جهاز
+
+
+
+2) الموقع الجغرافي إجباري
+
+لا إنشاء حساب نهائي
+
+ولا تسجيل دخول
+
+ولا تنفيذ عملية إلا بعد حفظ آخر موقع للجهاز
+
+
+3) الجهاز الجديد
+
+إذا device_uid جديد:
+
+إنشاء OTP_Challenges
+
+إرسال OTP عبر واتساب
+
+ربط الجهاز بعد التحقق
+
+
+
+4) التحكم في عدد الأجهزة
+
+تضيف في System_Settings أو Merchant_Profiles:
+
+max_devices
+
+max_active_sessions
+
+
+
+5) الخدمات ديناميكية
+
+الملفات عندك فيها عدد كبير من الخدمات والتصنيفات، لذلك لازم Services + Service_Fields + Service_Field_Options يكونوا ديناميكيين بالكامل بدل hardcode. 
+
+6) المعاملة تمر على مرحلتين
+
+Inquiry
+
+Payment
+
+
+وده مطابق لطريقة الـ API اللي عندك في الملفات، مع ضرورة تخزين APIID و CPRID وتتبع الحالة.
+
+
+---
+
+لو هتبدأ التنفيذ في MySQL
+
+أول 10 جداول لازم تتنفذ فورًا:
+
+Users
+
+User_KYC
+
+Devices
+
+Device_Permissions
+
+Device_Locations
+
+OTP_Challenges
+
+Service_Categories
+
+Services
+
+Inquiries
+
+Transactions
+
+
+وبعدهم:
+
+Wallets
+
+Invoices
+
+Audit_Logs
+
+Security_Events
+
+Merchant_Profiles
+
+Agent_Profiles
+
+
+
+---
+
+لو تحب، أطلع لك بعده مباشرة SQL كامل لإنشاء كل الجداول بنفس الـ ERD ده، جاهز للنسخ في MySQL.
