@@ -134,3 +134,11 @@ INSERT INTO system_settings (key, value) VALUES
 ('maintenance_mode', 'false'),
 ('global_notice', '"Welcome to Dr. Pay Professional Platform"')
 ON CONFLICT (key) DO NOTHING;
+
+-- 10. SERVICE OVERRIDES (Custom Fees & Status)
+CREATE TABLE IF NOT EXISTS service_overrides (
+    service_code TEXT PRIMARY KEY,
+    is_active BOOLEAN DEFAULT TRUE,
+    custom_fee DECIMAL(12, 2),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

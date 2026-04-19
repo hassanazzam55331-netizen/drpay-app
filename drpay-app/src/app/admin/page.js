@@ -24,17 +24,15 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      // Mock stats for setup
-      setTimeout(() => {
-        setStats({
-          merchants: { total: 12, pending: 3 },
-          transactions: { total: 154, volume: 25400 },
-          system: { balance: "4,500.00", status: "Active" }
-        });
-        setLoading(false);
-      }, 1000);
+      const res = await fetch('/api/admin/stats');
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.stats);
+      }
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch admin stats");
+      setLoading(false);
     }
   };
 
